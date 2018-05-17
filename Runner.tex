@@ -1,0 +1,103 @@
+\title{Filesystem virtualization without containers}
+
+\abstract{
+Containers became a popular way to distribute programs in a portable fashion and to run them
+under strict security constraints. However, thanks to their popularity and relatively ease
+of use, users often create full-fledged containers to run mundane executables. That renders to
+several complete Linux distributions being stored on the same device and brings considerable
+overhead to the load and execution of those programs. This paper presents the design and
+implementation of a virtualization tool that has been integrated into a full Linux-based
+distribution. That tool multiplexes the root filesystem according to the dependencies of programs
+executed without need for management of containers or images. Further, it seamlessly handles
+dependencies managed by third-party programming language modules like PIP and LuaRocks by treating
+them as first-class programs under the multiplexed filesystem tree.
+}
+
+\section{Introduction}
+Dependency hell is an old problem that haunts users wishing to install programs depending on
+different and often conflicting versions of a given package. That is the case of non-versioned
+libraries that attempt to overwrite files from a previous installation, effectively preventing
+concurrent versions of that library from coexisting. The same is true for packages whose executable
+names does not change across releases; unless the user renames the existing executable file names
+prior to the installation of a new version it is not possible to keep both installations around.
+The problem with that approach is that it breaks package managers, as the renamed files will not
+be featured in the package manager's database and, consequently, will not be tracked anymore. Further, 
+unless executables depending on the renamed files are modified to reflect their new path, users need
+to define which executable to activate at a given time, usually through a tricky management of
+symbolic links~\cite{RHEL?}.
+
+Besides the historical lack of support for seamlessly managing the installation and runtime
+execution of programs that depend on conflicting packages, operating systems face another problem:
+handling dependencies distributed by third-party software. A typical case is that of programming
+language modules: each programming language community packs and hosts modules according to their own
+format and enables their discovery and installation through special programs that many times are not
+properly integrated with the regular package manager. Examples include PIP, which manages Python
+packages, LuaRocks, which controls the installation and removal of Lua modules, CPAN, to control the
+installation of Perl packages, and RubyGems, which does the same for Ruby packages. Orchestrating
+dependencies managed by such a variety of programs can be quite complex.
+
+Many approaches have emerged through the years to work around the problem. In common, they propose
+encapsulation techniques that let software vendors ship their programs along with their dependencies
+in a single file and that let users execute said software effortlessly. Virtual machine images
+became a very popular distribution format in the early 2000's~\cite{Who?}, followed more recently by
+container images~\cite{Docker} that became possible thanks to advancements in microprocessor
+architectures~\cite{Intel} and in operating systems support for virtualization~\cite{KVM}. In spite
+of their success, an ever growing number of mundane programs gained their containerized version,
+even when those have no dependencies other than basic system libraries. As a result, users end up
+with several full-blown copies of operating system images that need to be managed in addition to
+the regular package management for fundamental operating system services.
+
+This paper presents a novel approach to the management and execution of programs that depends
+solely on changes to the layout of the filesystem hierarchy and on private process namespaces.
+Our lightweight proposal to filesystem virtualization has been fully integrated into a Linux-based
+distribution and includes support for both basic programs (such as those typically managed by RPM
+and DEB) and those managed by third-party software such as PIP and LuaRocks.
+
+The remaining of the paper is organized as follows. Section~\sec{foo} presents \ldots
+
+\section{Prior art}
+Explain how Docker~\cite{Docker} works.
+
+Snap and Flatpak.
+
+Explain how GNU Guix~\cite{Guix} works. There is a whole distribution (GuixSD) built around it.
+Guix provides support for the installation of multiple programs by installing them on unique
+prefixes that include the program name and a hash string that is calculated over the program's
+build inputs. For instance, two distinct versions of the Python interpreter could be installed
+under /gnu/store/[sha256-hash]-python-2.7.12 and /gnu/store/[sha256-hash]-python-3.6.0, each
+of which having their own bin, include, lib, and share subdirectories. \ldots
+Explain that there is no support for virtualization of programming language modules. More details
+here: https://github.com/pjotrp/guix-notes/blob/master/PYTHON.md
+https://www.gnu.org/software/guix/blog/2018/tarballs-the-ultimate-container-image-format/
+
+
+\section{Container-free filesystem virtualization}
+
+\subsection{The layout of the filesystem tree}
+Our approach to virtualization came up as a natural evolution of the filesystem tree proposed
+by GoboLinux~\cite{GoboLinux}. \ldots
+
+Talk about Resources/Dependencies
+Talk about Resources/Environment
+Talk about Resources/Architecture
+
+\subsection{Augmented filesystem tree with AlienVFS}
+AlienVFS is a component of GoboLinux that exposes packages installed by third-party software
+(i.e., PIP, CPAN, LuaRocks, and others) as virtual program entries under /Programs. \ldots
+
+\subsection{Filesystem virtualization with Runner}
+We scan the dependencies of a given program, stated by that program's Resources/Dependencies
+file, and then construct an overlay on top of /System/Index that is only visible to the process
+that executes that program. \ldots
+
+
+\section{Thoughts and comparison with the prior art}
+Things to note: containers can limit access to underlying hardware infrastructure, segment the
+network, and so on. They provide a complex infrastructure that lets system administrators to
+confine the execution of programs in a way that eases the control of available resources.
+
+We have developed and deployed our system on a Linux-based distribution.
+
+\section{Conclusion}
+This paper presented a container-free infrastructure to manage and run programs that have
+conflicting dependencies. 
