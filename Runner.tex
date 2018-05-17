@@ -92,7 +92,8 @@ Explain how Docker~\cite{fink2014docker} works.
 Snap and Flatpak.
 
 
-GNU Guix~\cite{courtes2013guix} is a transactional package manager. It supports transactional upgrades and
+GNU Guix~\cite{courtes2013guix} is a transactional package manager based on Nix~\cite{dolstra2004nix}.
+It supports transactional upgrades and
 roll-backs of packages through the installation of packages under unique prefixes on the filesystem.
 Such prefixes include the program name and a hash string that is calculated over the program's
 build inputs. For instance, two distinct versions of the Python interpreter could be installed
@@ -125,7 +126,7 @@ elsewhere.
 
 \subsection{The layout of the filesystem tree}
 Our approach to virtualization came up as a natural evolution of the filesystem tree proposed
-by GoboLinux~\cite{GoboLinux}. \ldots
+by GoboLinux~\cite{GoboLinux} in 2002. 
 
 Talk about Resources/Dependencies
 Talk about Resources/Environment
