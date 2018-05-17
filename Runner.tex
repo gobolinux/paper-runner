@@ -1,6 +1,35 @@
+\documentclass[sigplan, anonymous]{acmart}
+\usepackage{booktabs} % For formal tables
+
+\begin{document}
 \title{Filesystem virtualization without containers}
 
-\abstract{
+\author{Void}
+\orcid{1234-5678-9012}
+\affiliation{%
+  \institution{Redacted}
+  \streetaddress{Redacted}
+  \city{Redacted} 
+  \state{Redacted} 
+  \postcode{12345}
+}
+\email{void@localhost}
+
+\author{Null}
+\orcid{1234-5678-9012}
+\affiliation{%
+  \institution{Redacted}
+  \streetaddress{Redacted}
+  \city{Redacted} 
+  \state{Redacted} 
+  \postcode{12345}
+}
+\email{null@localhost}
+
+% The default list of authors is too long for headers}
+\renewcommand{\shortauthors}{Void et al.}
+
+\begin{abstract}
 Containers became a popular way to distribute programs in a portable fashion and to run them
 under strict security constraints. However, thanks to their popularity and relatively ease
 of use, users often create full-fledged containers to run mundane executables. That renders to
@@ -11,7 +40,9 @@ distribution. That tool multiplexes the root filesystem according to the depende
 executed without need for management of containers or images. Further, it seamlessly handles
 dependencies managed by third-party programming language modules like PIP and LuaRocks by treating
 them as first-class programs under the multiplexed filesystem tree.
-}
+\end{abstract}
+
+\maketitle
 
 \section{Introduction}
 Dependency hell is an old problem that haunts users wishing to install programs depending on
@@ -40,7 +71,7 @@ Many approaches have emerged through the years to work around the problem. In co
 encapsulation techniques that let software vendors ship their programs along with their dependencies
 in a single file and that let users execute said software effortlessly. Virtual machine images
 became a very popular distribution format in the early 2000's~\cite{Who?}, followed more recently by
-container images~\cite{Docker} that became possible thanks to advancements in microprocessor
+container images~\cite{fink2014docker} that became possible thanks to advancements in microprocessor
 architectures~\cite{Intel} and in operating systems support for virtualization~\cite{KVM}. In spite
 of their success, an ever growing number of mundane programs gained their containerized version,
 even when those have no dependencies other than basic system libraries. As a result, users end up
@@ -56,7 +87,7 @@ and DEB) and those managed by third-party software such as PIP and LuaRocks.
 The remaining of the paper is organized as follows. Section~\sec{foo} presents \ldots
 
 \section{Prior art}
-Explain how Docker~\cite{Docker} works.
+Explain how Docker~\cite{fink2014docker} works.
 
 Snap and Flatpak.
 
@@ -101,3 +132,8 @@ We have developed and deployed our system on a Linux-based distribution.
 \section{Conclusion}
 This paper presented a container-free infrastructure to manage and run programs that have
 conflicting dependencies. 
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{Runner}
+
+\end{document}
