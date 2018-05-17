@@ -1,5 +1,6 @@
 \documentclass[sigplan, anonymous]{acmart}
 \usepackage{booktabs} % For formal tables
+\newcommand{\shell}[1]{\\\indent\indent\texttt{\footnotesize\$ #1}\\}
 
 \begin{document}
 \title{Filesystem virtualization without containers}
@@ -126,11 +127,42 @@ elsewhere.
 
 \subsection{The layout of the filesystem tree}
 Our approach to virtualization came up as a natural evolution of the filesystem tree proposed
-by GoboLinux~\cite{GoboLinux} in 2002. 
+by GoboLinux~\cite{GoboLinux}. Instead of having parts of a program copied to \texttt{/usr/bin},
+other parts to \texttt{/etc} and yet more parts copied to \texttt{/usr/share/something}, on
+GoboLinux each program gets its own directory tree that are kept separated from each other.
+The distribution uses a directory structure that, albeit similar to the one used by Nix and
+Guix, predates them by several years and extends to the entire filesystem tree.
 
-Talk about Resources/Dependencies
-Talk about Resources/Environment
-Talk about Resources/Architecture
+The root filesystem contains directories named \texttt{Data}, \texttt{Mount}, \texttt{Programs},
+\texttt{System}, and \texttt{Users}. Programs are installed under \texttt{/Programs/Name/Version}.
+That directory holds not only the program's libraries, executables, headers, and shared files, but
+also metadata that describes which programs it depends on (\texttt{Resources/Dependencies}), any
+environment variables that must be configured prior to running executables distributed by that
+program (\texttt{Resources/Environment}, the target architecture of the executables
+(\texttt{Resources/Architecture}), and others.
+
+The Dependencies file is described with a simple syntax. Each line of that file determines
+a particular dependency, given by its directory under \texttt{/Programs} and, optionally,
+which version of that dependency is required. It is possible to specify ranges using the
+symbols $<$, $>$, and $=$, as in \texttt{LibFoo = 1.3} or \texttt{LibBar >= 1.0, < 2.0}.
+Given the layout of the \texttt{/Programs} tree it is trivial to determine whether a given
+dependency is satisfied and to determine which installed version of a dependency is the most
+recent one supported by a program.
+
+All executables, libraries, headers, and shared files are indexed on \texttt{/System/Index};
+that directory contains the typical \texttt{bin}, \texttt{include}, \texttt{lib}, \texttt{libexec},
+and \texttt{share} entries, along with the symbolic links \texttt{sbin $\rightarrow$ bin} and
+\texttt{lib64 $\rightarrow$ lib}. The files inside these directories are symbolic links to the
+most recent version of each program installed on the system or, alternatively, to a version
+configured by the user.
+
+In order to enable existing programs and scripts from running without modifications on
+the top of this filesystem tree, compatibility links such as
+\texttt{/bin $\rightarrow$ /System/Index/bin} and
+\texttt{/usr/include $\rightarrow$ /System/Index/include} exist, effectively letting
+executables and libraries to be found regardless of where they are searched for.
+The compatibility links are hidden from userspace programs for aesthetical reasons
+by an optional kernel extension developed by the distribution~\cite{GoboHide}.
 
 \subsection{Augmented filesystem tree with AlienVFS}
 AlienVFS is a component of GoboLinux that exposes packages installed by third-party software
