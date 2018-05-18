@@ -1,6 +1,7 @@
 \documentclass[sigplan, anonymous, 10pt]{acmart}
 \usepackage{booktabs} % For formal tables
 \usepackage{lipsum}
+\usepackage{fancyvrb}
 \newcommand{\shell}[1]{\\\texttt{\footnotesize\$ #1}\\}
 
 \begin{document}
@@ -195,20 +196,23 @@ subdirectories holding the installed version(s) of that module, as shown on
 Figure~\ref{fig:alienvfs}.
 
 \begin{figure}
-    \begin{verbatim}
+    \begin{Verbatim}[frame=single]
 $ ls /Mount/Aliens
-CPAN:Authen::SASL     PIP3:daemonize      PIP:pycairo
-CPAN:Digest::HMAC     PIP3:dbus-python    PIP:pyldap
-CPAN:Encode::Locale   PIP3:flasgger       PIP:PyOpenGL
-LuaRocks:luaposix     PIP3:Flask          PIP:sqlparse
-...
+CPAN:Authen::SASL     PIP3:numpy
+CPAN:Digest::HMAC     PIP3:urllib3
+CPAN:Encode::Locale   PIP:Flask
+LuaRocks:inotify      PIP:pycairo
+LuaRocks:lanes        PIP:sqlparse
+PIP3:dbus-python      RubyGems:rake
+PIP3:flasgger         RubyGems:xmlrpc
+...                   ...
 
 $ ls /Mount/Aliens/PIP:sqlparse
 0.2.4
 
 $ ls /Mount/Aliens/PIP:sqlparse/0.2.4
 bin  sqlparse  sqlparse-0.2.4.dist-info
-    \end{verbatim}
+    \end{Verbatim}
     \caption{Programming language modules exposed as regular programs with AlienVFS}
     \label{fig:alienvfs}
 \end{figure}
@@ -243,16 +247,20 @@ and provide a unified view of installed programs and programming language module
 shown in Figure~\ref{fig:alienvfs.merged}.
 
 \begin{figure}[h]
-    \begin{verbatim}
+    \begin{Verbatim}[frame=single]
 $ ls /Programs
-ALSA-Lib              LTFS                PIP:pyldap
-BinUtils              Lua                 PIP:PyOpenGL
-CoreUtils             LuaRocks            PIP:sqlparse
-CPAN:Authen::SASL     LuaRocks:inotify    Pkgconfig
-CPAN:Digest::HMAC     LuaRocks:lanes      PostgreSQL
-CPAN:Encode::Locale   LuaRocks:luaposix   Python
-...
-    \end{verbatim}
+ALSA-Lib              Pinfo
+BinUtils              Pixman
+CoreUtils             PIP3:dbus-python
+CPAN:Authen::SASL     PIP3:flasgger
+CPAN:Digest::HMAC     PIP3:numpy
+CPAN:Encode::Locale   PIP3:urllib3
+...                   ...
+LuaRocks              PIP:sqlparse
+LuaRocks:inotify      Pkgconfig
+LuaRocks:lanes        PostgreSQL
+...                   ...
+    \end{Verbatim}
     \caption{Overlay of AlienVFS on /Programs}
     \label{fig:alienvfs.merged}
 \end{figure}
