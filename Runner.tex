@@ -33,16 +33,18 @@
 \renewcommand{\shortauthors}{Void et al.}
 
 \begin{abstract}
-Containers became a popular way to distribute programs in a portable fashion and to run them
-under strict security constraints. However, thanks to their popularity and relatively ease
-of use, users often create full-fledged containers to run mundane executables. That renders to
-several complete Linux distributions being stored on the same device and brings considerable
-overhead to the load and execution of those programs. This paper presents the design and
-implementation of a virtualization tool that has been integrated into a full Linux-based
-distribution. That tool multiplexes the root filesystem according to the dependencies of programs
-executed without need for management of containers or images. Further, it seamlessly handles
-dependencies managed by third-party programming language modules like PIP and LuaRocks by treating
-them as first-class programs under the multiplexed filesystem tree.
+Resolving dependency versioning conflicts in applications is a long-standing problem in
+software development and deployment. Containers have become a popular way to address this
+problem, allowing programs to be distributed in a portable fashion and to run them under strict
+security constraints. Due to the popularity of this approach, its use has started to extend
+beyond its original aim, with users often create containers bundling entire Linux distributions
+to run mundane executables, incurring in hidden performance and maintenance costs.
+This paper presents an alternative approach to the problem of versioning resolution applied
+to locally-installed applications, through a virtualization tool integrated into the core
+of a Linux distribution. This tool multiplexes the root filesystem according to the
+dependencies of programs executed without need for management of containers or images,
+including support for third-party packages like those installed by programming language
+package managers such as Python's PIP.
 \end{abstract}
 
 \maketitle
