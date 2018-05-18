@@ -150,10 +150,10 @@ dependency is satisfied and to determine which installed version of a dependency
 recent one supported by a program.
 
 The Dependencies file also allows one to describe dependencies managed by third-party
-software. Those are prefixed by \texttt{PIP:}, \texttt{CPAN:}, and \texttt{LuaRocks:},
-followed by the package name. The difference regarding the dependency resolution, in
-this case, is that testing whether that dependency is installed or not is delegated
-to the corresponding third-party package manager.
+software. Those are prefixed by \texttt{PIP:}, \texttt{CPAN:}, \texttt{LuaRocks:}, and
+\texttt{RubyGems:}, followed by the package name. The difference regarding the dependency
+resolution, in this case, is that testing whether that dependency is installed or not is
+delegated to the corresponding third-party package manager.
 
 All executables, libraries, headers, and shared files are indexed on \texttt{/System/Index};
 that directory contains the typical \texttt{bin}, \texttt{include}, \texttt{lib}, \texttt{libexec},
@@ -161,6 +161,19 @@ and \texttt{share} entries, along with the symbolic links \texttt{sbin $\rightar
 \texttt{lib64 $\rightarrow$ lib}. The files inside these directories are symbolic links to the
 most recent version of each program installed on the system or, alternatively, to a version
 configured by the user.
+
+The Linux Hierarchy Standard (LHS)~\cite{lsb2015fhs} defines support for
+multiarch libraries (e.g., libraries built for i686 on an x86-64 platform)
+through directories named \texttt{/lib32} and \texttt{/lib64},
+where 32 and 64 are determined according to the architecture's pointer size.
+This solution does not work well once multiple 64 or 32-bit architectures must
+be supported due to namespace conflicts. An alternative approach would be to define
+multiple suffixes that reflect the target architecture, such as \texttt{/lib\_ia64}
+and \texttt{/lib\_x64\_64}, but the number of library directories quickly grow and
+difficults the maintenance of fundamental system services~\cite{heen2005thesis}.
+The layout of the filesystem tree we defined on GoboLinux includes a symbolic link
+\texttt{lib64 $\rightarrow$ lib} for backwards compatibility purposes alone so that
+an executable searching for that directory can find it.
 
 In order to enable existing programs and scripts from running without modifications on
 the top of this filesystem tree, compatibility links such as
@@ -248,11 +261,28 @@ much simpler implementation of dependency checkers: as long as the expected
 directory exists under /Programs, the dependency is met -- no matter if the
 dependency is a regular program or a programming language module.
 
-\subsection{Filesystem virtualization with Runner}
-We scan the dependencies of a given program, stated by that program's Resources/Dependencies
-file, and then construct an overlay on top of /System/Index that is only visible to the process
-that executes that program. \ldots
+\subsection{Lightweight filesystem virtualization without containers}
+In this section we present the second contribution of this paper. Runner is a
+filesystem multiplexer that we created to enable the resolution of conflicting
+dependencies at run time. It is conceptually similar to the statically-linked
+wrappers recently introduced on Guix, but suitable to the layout of the
+\texttt{/Programs} tree and supporting multiarch executables and libraries
+in a rather unique way.
 
+Runner works by creating private mounts for each program it executes. The
+private mounts are composed by \texttt{/System/Index} with overlays mounts
+of each dependency of that program. The dependency list can be given either
+explicitly with a Dependencies file or implicitly by inferring the location
+where that program is installed. If the executable happens to come from
+\texttt{/Programs}, then that program's \texttt{Resources/Dependencies}
+file is parsed by default. Also, if a dependency happens to have more than
+one installed version, then any existing files from other versions of that
+dependency are removed from the private mount point of that process. This
+ensures that only a single version of a dependency is ``active'' at a time.
+
+XXX write about multiarch support (ELF + Resources/Architecture)
+
+XXX write about Resources/Environment
 
 \section{Thoughts and comparison with the prior art}
 Things to note: containers can limit access to underlying hardware infrastructure, segment the
@@ -260,6 +290,9 @@ network, and so on. They provide a complex infrastructure that lets system admin
 confine the execution of programs in a way that eases the control of available resources.
 
 We have developed and deployed our system on a Linux-based distribution.
+
+XXX say that we have been successfully using Runner to enable multiple GCC versions.
+That is needed by CUDA, for instance, which depends on specific versions of the compiler.
 
 \section{Conclusion}
 This paper presented a container-free infrastructure to manage and run programs that have
