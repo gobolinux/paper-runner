@@ -76,7 +76,12 @@ in a single file and that let users execute said software effortlessly. Virtual 
 became a very popular distribution format in the early 2000's~\cite{Who?}, followed more recently by
 container images~\cite{fink2014:docker} that became possible thanks to advancements in microprocessor
 architectures~\cite{uhlig2005:vtx, amd2005:svm} and in operating systems support for virtualization
-~\cite{russell2008:virtio, dall2014:kvm+arm, kivity2007:kvm}. In spite
+~\cite{russell2008:virtio, dall2014:kvm+arm, kivity2007:kvm}. 
+
+\textbf{XXX mention very briefly how virtualization and containerization works.}
+\lipsum[1]
+
+In spite
 of their success, an ever growing number of mundane programs gained their containerized version,
 even when those have no dependencies other than basic system libraries. As a result, users end up
 with several full-blown copies of operating system images that need to be managed in addition to
@@ -93,6 +98,13 @@ The remaining of the paper is organized as follows. Section~\ref{sec:foo} presen
 \section{Prior art}
 Explain how Docker~\cite{fink2014:docker} works.
 \lipsum[1-3]
+
+Snap is another technology built for creating and distributing universal packages on Linux-based
+operating systems. Proposed by Canonical, the format is based on a read-only SquashFS filesystem
+image that contains the application of interest along with its dependencies. A metadata file
+included in the image determines the package name, its version, and the command line required
+to execute the software, along with other information.
+
 
 Snap and Flatpak.
 \lipsum[4-6]
