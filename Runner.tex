@@ -98,20 +98,43 @@ and DEB) and those managed by third-party software such as PIP and LuaRocks.
 The remaining of the paper is organized as follows. Section~\ref{sec:foo} presents \ldots
 
 \section{Prior art}
-Explain how Docker~\cite{fink2014:docker} works.
-\lipsum[1-3]
 
-Snap is another technology built for creating and distributing universal packages on Linux-based
+Write about AppImages.
+
+Snap is a technology built for creating and distributing universal packages on Linux-based
 operating systems. Proposed by Canonical, the format is based on a read-only SquashFS filesystem
 image that contains the application of interest along with its dependencies. A metadata file
 included in the image determines the package name, its version, and the command line required
-to execute the software, along with other information. It is also possible to run the program
-in a confined sandbox enforced by AppArmor, a Linux kernel security module. At runtime, Snap
-creates a writable area through 
+to execute the software, along with other information~\cite{canonical2011:snapcraft}.
+It is also possible to run the program in a confined sandbox enforced by AppArmor, a Linux kernel
+security module that allows fine-grained control over user applications (albeit requiring greater
+expertise to be configured than typical end users can reasonably be expected to
+have~\cite{schreuders2011:empowering}).
 
+Because Snap programs execute in an isolated environment, communication with other parties
+and resource sharing must be arranged through predefined \emph{interfaces}. Such interfaces
+coordinate access to services such as sound card devices, bluetooth controllers, filesystem
+areas, printing services, and so on, and require a consumer in one end (called a ``plug''
+in Snap nomenclature) and a provider (``slot''). Although some basic interfaces are automatically
+connected by default (such as ones considered transitional to support traditional desktop
+environments), most interfaces need to be manually connected by the user. Lastly, because
+an entire ecosystem of dependencies is encapsulated in a Snap package, there can be several
+redundant files replicated over Snap packages of different applications.
 
-Snap and Flatpak.
-\lipsum[4-6]
+Flatpak serves the same purpose as Snap: it provides a mechanism to distribute packages
+across Linux-based distributions in a portable fashion. Differently from Snap, Flatpak
+uncompresses and stores the packages in the target filesystem under a shared directory
+that contains data from other Flatpak packages. By doing so, Flatpak is able to detect
+redundant files and to store only a single copy of the files. That is achieved with the
+use of hard links. Limits are managed through Linux Seccomp, a facility that enables
+the creation of filters that, on Flatpak, can be used to disable certain system calls
+issued by the application~\cite{lwn2015:seccomp}. Several private namespace settings
+also exist to control access to the network and to other processes outside the sandbox.
+As with Snap, fine tuning such rules requires a deep knowledge of the application being
+contained as well as of the system calls and resources it uses.
+
+Explain how Docker~\cite{fink2014:docker} works.
+\lipsum[1-2]
 
 GNU Guix~\cite{courtes2013:guix} is a transactional package manager based on Nix~\cite{dolstra2004:nix}.
 It supports transactional upgrades and
