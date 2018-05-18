@@ -1,4 +1,12 @@
-@misc{brown2018overlayfs,
+@article{amd2005:svm,
+  title={Secure virtual machine architecture reference manual},
+  author={Virtualization, AMD64},
+  journal={AMD Publication},
+  number={33047},
+  year={2005}
+}
+
+@misc{brown2018:overlayfs,
   title={Overlay Filesystem},
   author={Neil Brown},
   url={https://www.kernel.org/doc/Documentation/filesystems/overlayfs.txt},
@@ -6,29 +14,47 @@
   note={Accessed on May 17, 2018}
 }
 
-@article{courtes2013guix,
+@article{courtes2013:guix,
   title={Functional package management with guix},
   author={Court{\`e}s, Ludovic},
   journal={arXiv preprint arXiv:1305.4584},
   year={2013}
 }
 
-@inproceedings{dolstra2004nix,
- author = {Dolstra, Eelco and de Jonge, Merijn and Visser, Eelco},
- title = {Nix: A Safe and Policy-Free System for Software Deployment},
- booktitle = {Proceedings of the 18th USENIX Conference on System Administration},
- series = {LISA '04},
- year = {2004},
- location = {Atlanta, GA},
- pages = {79--92},
- numpages = {14},
- url = {http://dl.acm.org/citation.cfm?id=1052676.1052686},
- acmid = {1052686},
- publisher = {USENIX Association},
- address = {Berkeley, CA, USA},
+@inproceedings{dall2014:kvm+arm,
+  author = {Dall, Christoffer and Nieh, Jason},
+  title = {KVM/ARM: The Design and Implementation of the Linux ARM Hypervisor},
+  booktitle = {Proceedings of the 19th International Conference on Architectural Support for Programming Languages and Operating Systems},
+  series = {ASPLOS '14},
+  year = {2014},
+  isbn = {978-1-4503-2305-5},
+  location = {Salt Lake City, Utah, USA},
+  pages = {333--348},
+  numpages = {16},
+  url = {http://doi.acm.org/10.1145/2541940.2541946},
+  doi = {10.1145/2541940.2541946},
+  acmid = {2541946},
+  publisher = {ACM},
+  address = {New York, NY, USA},
+  keywords = {arm, hypervisors, linux, multicore, operating systems, virtualization},
 }
 
-@article{fink2014docker,
+@inproceedings{dolstra2004:nix,
+  author = {Dolstra, Eelco and de Jonge, Merijn and Visser, Eelco},
+  title = {Nix: A Safe and Policy-Free System for Software Deployment},
+  booktitle = {Proceedings of the 18th USENIX Conference on System Administration},
+  series = {LISA '04},
+  year = {2004},
+  location = {Atlanta, GA},
+  pages = {79--92},
+  numpages = {14},
+  url = {http://dl.acm.org/citation.cfm?id=1052676.1052686},
+  acmid = {1052686},
+  publisher = {USENIX Association},
+  address = {Berkeley, CA, USA},
+}
+
+@article{fink2014:docker,
   title={Docker: a software as a service, operating system-level virtualization framework},
   author={Fink, John},
   journal={Code4Lib Journal},
@@ -37,7 +63,7 @@
   year={2014}
 }
 
-@misc{gnu2017bundles,
+@misc{gnu2017:bundles,
   title={Creating bundles with guix pack},
   author={Court{\`e}s, Ludovic},
   url={https://www.gnu.org/software/guix/blog/2017/creating-bundles-with-guix-pack},
@@ -45,7 +71,7 @@
   note={Accessed on May 17, 2018}
 }
 
-@misc{gnu2018tarballs,
+@misc{gnu2018:tarballs,
   title={Tarballs, the ultimate container image format},
   author={Court{\`e}s, Ludovic},
   url={https://www.gnu.org/software/guix/blog/2018/tarballs-the-ultimate-container-image-format},
@@ -53,14 +79,23 @@
   note={Accessed on May 17, 2018}
 }
 
-@mastersthesis{heen2005thesis,
+@mastersthesis{heen2005:thesis,
   title={An implemention of support for multiple run-time architectures in a packaging system perspective},
   author={Heen, Tollef Fog},
   year={2005},
   school={Institutt for datateknikk og informasjonsvitenskap}
 }
 
-@misc{lsb2015fhs,
+@inproceedings{kivity2007:kvm,
+  author = {Avi Kivity and Yaniv Kamay and Dor Laor and Uri Lublin and Anthony Liguori},
+  title = {{KVM}: the Linux Virtual Machine Monitor},
+  year = {2007},
+  month = {01},
+  volume = {15},
+  booktitle = {In Proceedings of the 2007 Ottawa Linux Symposium (OLS'-07)},
+}
+
+@misc{lsb2015:fhs,
   title={Filesystem Hierarchy Standard},
   author={{LSB Workgroup, The Linux Foundation}},
   url={https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf},
@@ -68,10 +103,44 @@
   note={Accessed on May 17, 2018}
 }
 
-@misc{miklos2001fuse,
+@misc{miklos2001:fuse,
   title={Filesystem in Userspace},
   author={Miklos Szeredi},
   url={https://github.com/libfuse/libfuse},
   year={2001},
   note={Accessed on May 17, 2018}
+}
+
+@article{russell2008:virtio,
+  author = {Russell, Rusty},
+  title = {Virtio: Towards a De-facto Standard for Virtual I/O Devices},
+  journal = {SIGOPS Oper. Syst. Rev.},
+  issue_date = {July 2008},
+  volume = {42},
+  number = {5},
+  month = jul,
+  year = {2008},
+  issn = {0163-5980},
+  pages = {95--103},
+  numpages = {9},
+  url = {http://doi.acm.org/10.1145/1400097.1400108},
+  doi = {10.1145/1400097.1400108},
+  acmid = {1400108},
+  publisher = {ACM},
+  address = {New York, NY, USA},
+  keywords = {I/O, KVM, Linux, lguest, ring buffer, virtio, virtio_pci, virtualization, vring},
+}
+
+@article{uhlig2005:vtx,
+  author={R. Uhlig and G. Neiger and D. Rodgers and A. L. Santoni and F. C. M. Martins and A. V. Anderson and S. M. Bennett and A. Kagi and F. H. Leung and L. Smith},
+  journal={Computer},
+  title={Intel virtualization technology},
+  year={2005},
+  volume={38},
+  number={5},
+  pages={48-56},
+  keywords={computer architecture;mainframes;operating systems (computers);performance evaluation;security of data;virtual machines;Intel virtualization technology;Itanium processor virtualization;guest operating systems;mainframe systems;virtual machine monitor;virtual platform interfaces;Application software;Application virtualization;Computer architecture;File servers;Hardware;Operating systems;Platform virtualization;Virtual machine monitors;Virtual manufacturing;Voice mail;IA-32 architecture;Itanium architecture;computer architectures;software systems;virtual machines;virtualization technology},
+  doi={10.1109/MC.2005.163},
+  ISSN={0018-9162},
+  month={May},
 }
