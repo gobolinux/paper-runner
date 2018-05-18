@@ -1,6 +1,6 @@
 \documentclass[sigplan, anonymous]{acmart}
 \usepackage{booktabs} % For formal tables
-\newcommand{\shell}[1]{\\\indent\indent\texttt{\footnotesize\$ #1}\\}
+\newcommand{\shell}[1]{\\\texttt{\footnotesize\$ #1}\\}
 
 \begin{document}
 \title{Filesystem virtualization without containers}
@@ -149,6 +149,12 @@ Given the layout of the \texttt{/Programs} tree it is trivial to determine wheth
 dependency is satisfied and to determine which installed version of a dependency is the most
 recent one supported by a program.
 
+The Dependencies file also allows one to describe dependencies managed by third-party
+software. Those are prefixed by \texttt{PIP:}, \texttt{CPAN:}, and \texttt{LuaRocks:},
+followed by the package name. The difference regarding the dependency resolution, in
+this case, is that testing whether that dependency is installed or not is delegated
+to the corresponding third-party package manager.
+
 All executables, libraries, headers, and shared files are indexed on \texttt{/System/Index};
 that directory contains the typical \texttt{bin}, \texttt{include}, \texttt{lib}, \texttt{libexec},
 and \texttt{share} entries, along with the symbolic links \texttt{sbin $\rightarrow$ bin} and
@@ -164,9 +170,83 @@ executables and libraries to be found regardless of where they are searched for.
 The compatibility links are hidden from userspace programs for aesthetical reasons
 by an optional kernel extension developed by the distribution~\cite{GoboHide}.
 
-\subsection{Augmented filesystem tree with AlienVFS}
-AlienVFS is a component of GoboLinux that exposes packages installed by third-party software
-(i.e., PIP, CPAN, LuaRocks, and others) as virtual program entries under /Programs. \ldots
+\subsection{Augmented filesystem tree}
+We hereby present the first contribution of this paper. AlienVFS is a novel virtual
+filesystem that we developed that mirrors modules installed by programming language
+package managers under a centralized directory. In other words, modules installed
+through CPAN, LuaRocks, PIP, RubyGems, and other supported languages are exposed under
+a single mount point. The virtual directory presents the module name and one or more
+subdirectories holding the installed version(s) of that module, as shown on
+Figure~\ref{fig:alienvfs}.
+
+\begin{figure}
+    \label{fig:alienvfs}
+    \caption{Programming language modules exposed as regular programs with AlienVFS}
+    \begin{verbatim}
+$ ls /Mount/Aliens
+CPAN:Authen::SASL     PIP3:daemonize      PIP:pycairo
+CPAN:Digest::HMAC     PIP3:dbus-python    PIP:pyldap
+CPAN:Encode::Locale   PIP3:flasgger       PIP:PyOpenGL
+LuaRocks:luaposix     PIP3:Flask          PIP:sqlparse
+...
+
+$ ls /Mount/Aliens/PIP:sqlparse
+0.2.4
+
+$ ls /Mount/Aliens/PIP:sqlparse/0.2.4
+bin  sqlparse  sqlparse-0.2.4.dist-info
+    \end{verbatim}
+\end{figure}
+
+AlienVFS creates an in-memory mapping of the programming language modules installed
+by either interacting with the corresponding package manager or by parsing manifest
+files found in well known locations. The same approach is used to determine the
+name and version of the modules that are used to compose the top-level directories
+of the virtual filesystem tree. The following backends are supported by our initial
+implementation of AlienVS:
+
+\begin{itemize}
+    \item CPAN: provides support for Perl modules. Modules names and file listings
+        are obtained from \emph{packlist} manifests under the directories reported
+        by the \texttt{perldoc} utility;
+    \item LuaRocks: installed Lua modules along with their paths are retrieved
+        through interaction with the \texttt{luarocks} package manager;
+    \item PIP and PIP3: the lists of files installed by Python 2.x and 3.x modules
+        are obtained by parsing Egg-Info and Dist-Info manifests;
+    \item RubyGems: implements support for Ruby modules. The module search location
+        and the list of installed files are obtained by direct interaction with the
+        \texttt{gem} package manager.
+\end{itemize}
+
+The virtual filesystem is implemented as a FUSE daemon~\cite{miklos2002fuse} that
+redirects system calls (such as \texttt{stat} and \texttt{read}) to the original
+location where the modules are installed.
+
+Since AlienVFS mimics the structure of regular packages installed under
+\texttt{/Programs}, we can merge them using an overlay filesystem~\cite{brown2018overlayfs}
+and provide a unified view of installed programs and programming language modules, as
+shown in Figure~\ref{fig:alienvfs_merged}.
+
+\begin{figure}
+    \label{fig:alienvfs_merged}
+    \caption{Overlay of AlienVFS on /Programs}
+    \begin{verbatim}
+$ ls /Programs
+ALSA-Lib              LTFS                PIP:pyldap
+BinUtils              Lua                 PIP:PyOpenGL
+CoreUtils             LuaRocks            PIP:sqlparse
+CPAN:Authen::SASL     LuaRocks:inotify    Pkgconfig
+CPAN:Digest::HMAC     LuaRocks:lanes      PostgreSQL
+CPAN:Encode::Locale   LuaRocks:luaposix   Python
+...
+    \end{verbatim}
+\end{figure}
+
+The merged layout makes it easier for users to navigate their filesystem tree
+and inspect programming modules files of their interest. Further, it enables a
+much simpler implementation of dependency checkers: as long as the expected
+directory exists under /Programs, the dependency is met -- no matter if the
+dependency is a regular program or a programming language module.
 
 \subsection{Filesystem virtualization with Runner}
 We scan the dependencies of a given program, stated by that program's Resources/Dependencies
