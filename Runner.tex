@@ -101,6 +101,7 @@ The remaining of the paper is organized as follows. Section~\ref{sec:foo} presen
 
 Write about AppImages.
 
+\textbf{Snap.}
 Snap is a technology built for creating and distributing universal packages on Linux-based
 operating systems. Proposed by Canonical, the format is based on a read-only SquashFS filesystem
 image that contains the application of interest along with its dependencies. A metadata file
@@ -133,9 +134,48 @@ also exist to control access to the network and to other processes outside the s
 As with Snap, fine tuning such rules requires a deep knowledge of the application being
 contained as well as of the system calls and resources it uses.
 
+\textbf{Docker.}
 Explain how Docker~\cite{fink2014:docker} works.
 \lipsum[1-2]
 
+The approaches presented above all package an application for execution inside one file,
+that functions as a separate file system. An alternative approach is to organize the
+file system structure of the host system so that applications can be installed in an
+isolated manner. Operating systems that are unconstrained by the Unix legacy often
+choose this approach, as seen in the application folder structure of systems like
+macOS and Microsoft Windows, but even in those cases core system packages often
+break this isolation, often due to backwards compatibility. Another limitation is that
+versioning is not mandated by these application directories, so compatibility issues
+also arise outside of core packages.
+
+A number of efforts have addressed this problem over the years, aiming for a reorganization
+of the OS file structure with versioning in mind. Some of them are presented below.
+
+\textbf{GoboLinux.}
+GoboLinux~\cite{GoboLinux} was the first Linux distribution to present a fully versioned
+file system structure. Instead of having programs installed to traditional Unix paths
+like \texttt{/usr/bin}, \texttt{/etc} and \texttt{/usr/share/something}, on GoboLinux
+each program gets its own version directory subtree.
+
+Programs are installed under \texttt{/Programs/Name/Version}. That directory holds not
+only the program's libraries, executables, headers, and shared files, but also metadata
+that describes in plain text files which programs it depends on (\texttt{Resources/Dependencies}),
+any environment variables that must be configured prior to running executables distributed
+by that program (\texttt{Resources/Environment}, the target architecture of the executables
+(\texttt{Resources/Architecture}), and others.
+
+For compatibility with the Unix legacy, all executables, libraries, headers, and shared
+files are indexed via symbolic links on \texttt{/System/Index};
+that directory contains the typical Unix directories, like \texttt{bin}, \texttt{include}
+and \texttt{lib}. The files inside these directories are symbolic links to the
+most recent version of each program installed on the system or, alternatively, to a version
+configured by the user. In order to enable existing programs and scripts from running
+without modifications on the top of this filesystem tree, the base \texttt{/System/Index}
+directory is mapped to \texttt{/usr}, resulting in fully-compatible Unix paths.
+The compatibility links are hidden from userspace programs for aesthetical reasons
+by an optional kernel extension developed by the distribution~\cite{GoboHide}.
+
+\textbf{GNU Guix.}
 GNU Guix~\cite{courtes2013:guix} is a transactional package manager based on Nix~\cite{dolstra2004:nix}.
 It supports transactional upgrades and
 roll-backs of packages through the installation of packages under unique prefixes on the filesystem.
@@ -165,66 +205,19 @@ such modules will be installed under their corresponding Python/Lua/Guile/Perl/e
 under \texttt{/gnu/store} unless the corresponding third-party managers are told to install them
 elsewhere.
 
+\textbf{Homebrew.}
+Homebrew~\cite{homebrew} is a general-purpose package manager for macOS. Being a third-party project,
+it does not manage core system packages provided by the OS, neither applications installed
+into the standard Mac \texttt{/Applications} directory. Instead, it constructs its own
+subtree where programs are installed into versioned isolated subdirectories, indexed
+by a separate symbolic link tree, inspired by the model of
+GoboLinux~\cite{howell2009:homebrewgobo}.
+
+Like the container-based approaches, Homebrew is limited to add-on packages on top of
+a core system. Still, its enduring popularity demonstrates the feasibility of the
+underlying model.
 
 \section{Container-free filesystem virtualization}
-
-\subsection{The layout of the filesystem tree}
-Our approach to virtualization came up as a natural evolution of the filesystem tree proposed
-by GoboLinux~\cite{GoboLinux}. Instead of having parts of a program copied to \texttt{/usr/bin},
-other parts to \texttt{/etc} and yet more parts copied to \texttt{/usr/share/something}, on
-GoboLinux each program gets its own directory tree that are kept separated from each other.
-The distribution uses a directory structure that, albeit similar to the one used by Nix and
-Guix, predates them and extends the concept to the entire filesystem tree.
-
-The root filesystem contains directories named \texttt{Data}, \texttt{Mount}, \texttt{Programs},
-\texttt{System}, and \texttt{Users}. Programs are installed under \texttt{/Programs/Name/Version}.
-That directory holds not only the program's libraries, executables, headers, and shared files, but
-also metadata that describes which programs it depends on (\texttt{Resources/Dependencies}), any
-environment variables that must be configured prior to running executables distributed by that
-program (\texttt{Resources/Environment}, the target architecture of the executables
-(\texttt{Resources/Architecture}), and others.
-
-The Dependencies file is described with a simple syntax. Each line of that file determines
-a particular dependency, given by its directory under \texttt{/Programs} and, optionally,
-which version of that dependency is required. It is possible to specify ranges using the
-symbols $<$, $>$, and $=$, as in \texttt{LibFoo = 1.3} or \texttt{LibBar >= 1.0, < 2.0}.
-Given the layout of the \texttt{/Programs} tree it is trivial to determine whether a given
-dependency is satisfied and to determine which installed version of a dependency is the most
-recent one supported by a program.
-
-The Dependencies file also allows one to describe dependencies managed by third-party
-software. Those are prefixed by \texttt{PIP:}, \texttt{CPAN:}, \texttt{LuaRocks:}, and
-\texttt{RubyGems:}, followed by the package name. The difference regarding the dependency
-resolution, in this case, is that testing whether that dependency is installed or not is
-delegated to the corresponding third-party package manager.
-
-All executables, libraries, headers, and shared files are indexed on \texttt{/System/Index};
-that directory contains the typical \texttt{bin}, \texttt{include}, \texttt{lib}, \texttt{libexec},
-and \texttt{share} entries, along with the symbolic links \texttt{sbin $\rightarrow$ bin} and
-\texttt{lib64 $\rightarrow$ lib}. The files inside these directories are symbolic links to the
-most recent version of each program installed on the system or, alternatively, to a version
-configured by the user.
-
-The Linux Hierarchy Standard (LHS)~\cite{lsb2015:fhs} defines support for
-multiarch libraries (e.g., libraries built for i686 on an x86-64 platform)
-through directories named \texttt{/lib32} and \texttt{/lib64},
-where 32 and 64 are determined according to the architecture's pointer size.
-This solution does not work well once multiple 64 or 32-bit architectures must
-be supported due to namespace conflicts. An alternative approach would be to define
-multiple suffixes that reflect the target architecture, such as \texttt{/lib\_ia64}
-and \texttt{/lib\_x64\_64}, but the number of library directories quickly grow and
-difficults the maintenance of fundamental system services~\cite{heen2005:thesis}.
-The layout of the filesystem tree we defined on GoboLinux includes a symbolic link
-\texttt{lib64 $\rightarrow$ lib} for backwards compatibility purposes alone so that
-an executable searching for that directory can find it.
-
-In order to enable existing programs and scripts from running without modifications on
-the top of this filesystem tree, compatibility links such as
-\texttt{/bin $\rightarrow$ /System/Index/bin} and
-\texttt{/usr/include $\rightarrow$ /System/Index/include} exist, effectively letting
-executables and libraries to be found regardless of where they are searched for.
-The compatibility links are hidden from userspace programs for aesthetical reasons
-by an optional kernel extension developed by the distribution~\cite{GoboHide}.
 
 \subsection{Augmented filesystem tree}
 We hereby present the first contribution of this paper. AlienVFS is a novel virtual
@@ -322,16 +315,47 @@ in a rather unique way.
 Runner works by creating private mounts for each program it executes. The
 private mounts are composed by \texttt{/System/Index} with overlays mounts
 of each dependency of that program. The dependency list can be given either
-explicitly with a Dependencies file or implicitly by inferring the location
-where that program is installed. If the executable happens to come from
-\texttt{/Programs}, then that program's \texttt{Resources/Dependencies}
-file is parsed by default. Also, if a dependency happens to have more than
+explicitly with a plain text \texttt{Dependencies} file or implicitly by
+inferring the location where that program is installed. If the executable
+happens to come from a subtree of  the default GoboLinux location
+(\texttt{/Programs}), then that program's \texttt{Resources/Dependencies}
+file is parsed by default.
+
+The \texttt{Dependencies} file is described with a simple syntax. Each line of that file determines
+a particular dependency, given by its directory under \texttt{/Programs} and, optionally,
+which version of that dependency is required. It is possible to specify ranges using the
+symbols $<$, $>$, and $=$, as in \texttt{LibFoo = 1.3} or \texttt{LibBar >= 1.0, < 2.0}.
+Given the layout of the \texttt{/Programs} tree it is trivial to determine whether a given
+dependency is satisfied and to determine which installed version of a dependency is the most
+recent one supported by a program.
+
+The Dependencies file also allows one to describe dependencies managed by third-party
+software. Those are prefixed by \texttt{PIP:}, \texttt{CPAN:}, \texttt{LuaRocks:}, and
+\texttt{RubyGems:}, followed by the package name. The difference regarding the dependency
+resolution, in this case, is that testing whether that dependency is installed or not is
+delegated to the corresponding third-party package manager.
+
+Also, if a dependency happens to have more than
 one installed version, then any existing files from other versions of that
 dependency are removed from the private mount point of that process. This
 ensures that only a single version of a dependency is ``active'' at a time.
 
 XXX write about multiarch support (ELF + Resources/Architecture)
 \lipsum[7]
+
+\textbf{XXX fit this paragraph with the multiarch section.}
+The Linux Hierarchy Standard (LHS)~\cite{lsb2015:fhs} defines support for
+multiarch libraries (e.g., libraries built for i686 on an x86-64 platform)
+through directories named \texttt{/lib32} and \texttt{/lib64},
+where 32 and 64 are determined according to the architecture's pointer size.
+This solution does not work well once multiple 64 or 32-bit architectures must
+be supported due to namespace conflicts. An alternative approach would be to define
+multiple suffixes that reflect the target architecture, such as \texttt{/lib\_ia64}
+and \texttt{/lib\_x64\_64}, but the number of library directories quickly grow and
+difficults the maintenance of fundamental system services~\cite{heen2005:thesis}.
+The layout of the filesystem tree we defined on GoboLinux includes a symbolic link
+\texttt{lib64 $\rightarrow$ lib} for backwards compatibility purposes alone so that
+an executable searching for that directory can find it.
 
 XXX write about Resources/Environment
 \lipsum[8]
