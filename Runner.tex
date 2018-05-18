@@ -193,8 +193,6 @@ subdirectories holding the installed version(s) of that module, as shown on
 Figure~\ref{fig:alienvfs}.
 
 \begin{figure}
-    \label{fig:alienvfs}
-    \caption{Programming language modules exposed as regular programs with AlienVFS}
     \begin{verbatim}
 $ ls /Mount/Aliens
 CPAN:Authen::SASL     PIP3:daemonize      PIP:pycairo
@@ -209,6 +207,8 @@ $ ls /Mount/Aliens/PIP:sqlparse
 $ ls /Mount/Aliens/PIP:sqlparse/0.2.4
 bin  sqlparse  sqlparse-0.2.4.dist-info
     \end{verbatim}
+    \caption{Programming language modules exposed as regular programs with AlienVFS}
+    \label{fig:alienvfs}
 \end{figure}
 
 AlienVFS creates an in-memory mapping of the programming language modules installed
@@ -231,18 +231,16 @@ implementation of AlienVS:
         \texttt{gem} package manager.
 \end{itemize}
 
-The virtual filesystem is implemented as a FUSE daemon~\cite{miklos2002fuse} that
+The virtual filesystem is implemented as a FUSE daemon~\cite{miklos2001fuse} that
 redirects system calls (such as \texttt{stat} and \texttt{read}) to the original
 location where the modules are installed.
 
 Since AlienVFS mimics the structure of regular packages installed under
 \texttt{/Programs}, we can merge them using an overlay filesystem~\cite{brown2018overlayfs}
 and provide a unified view of installed programs and programming language modules, as
-shown in Figure~\ref{fig:alienvfs_merged}.
+shown in Figure~\ref{fig:alienvfs.merged}.
 
-\begin{figure}
-    \label{fig:alienvfs_merged}
-    \caption{Overlay of AlienVFS on /Programs}
+\begin{figure}[h]
     \begin{verbatim}
 $ ls /Programs
 ALSA-Lib              LTFS                PIP:pyldap
@@ -253,6 +251,8 @@ CPAN:Digest::HMAC     LuaRocks:lanes      PostgreSQL
 CPAN:Encode::Locale   LuaRocks:luaposix   Python
 ...
     \end{verbatim}
+    \caption{Overlay of AlienVFS on /Programs}
+    \label{fig:alienvfs.merged}
 \end{figure}
 
 The merged layout makes it easier for users to navigate their filesystem tree
