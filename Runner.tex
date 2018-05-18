@@ -87,6 +87,8 @@ even when those have no dependencies other than basic system libraries. As a res
 with several full-blown copies of operating system images that need to be managed in addition to
 the regular package management for fundamental operating system services.
 
+\textbf{Falar sobre os overheads ocultos de gerenciamento de containers.}
+
 This paper presents a novel approach to the management and execution of programs that depends
 solely on changes to the layout of the filesystem hierarchy and on private process namespaces.
 Our lightweight proposal to filesystem virtualization has been fully integrated into a Linux-based
@@ -103,7 +105,9 @@ Snap is another technology built for creating and distributing universal package
 operating systems. Proposed by Canonical, the format is based on a read-only SquashFS filesystem
 image that contains the application of interest along with its dependencies. A metadata file
 included in the image determines the package name, its version, and the command line required
-to execute the software, along with other information.
+to execute the software, along with other information. It is also possible to run the program
+in a confined sandbox enforced by AppArmor, a Linux kernel security module. At runtime, Snap
+creates a writable area through 
 
 
 Snap and Flatpak.
@@ -147,7 +151,7 @@ by GoboLinux~\cite{GoboLinux}. Instead of having parts of a program copied to \t
 other parts to \texttt{/etc} and yet more parts copied to \texttt{/usr/share/something}, on
 GoboLinux each program gets its own directory tree that are kept separated from each other.
 The distribution uses a directory structure that, albeit similar to the one used by Nix and
-Guix, predates them by several years and extends to the entire filesystem tree.
+Guix, predates them and extends the concept to the entire filesystem tree.
 
 The root filesystem contains directories named \texttt{Data}, \texttt{Mount}, \texttt{Programs},
 \texttt{System}, and \texttt{Users}. Programs are installed under \texttt{/Programs/Name/Version}.
@@ -287,7 +291,7 @@ dependency is a regular program or a programming language module.
 \subsection{Lightweight filesystem virtualization without containers}
 In this section we present the second contribution of this paper. Runner is a
 filesystem multiplexer that we created to enable the resolution of conflicting
-dependencies at run time. It is conceptually similar to the statically-linked
+dependencies at runtime. It is conceptually similar to the statically-linked
 wrappers recently introduced on Guix, but suitable to the layout of the
 \texttt{/Programs} tree and supporting multiarch executables and libraries
 in a rather unique way.
