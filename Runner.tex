@@ -37,7 +37,7 @@ Resolving dependency versioning conflicts in applications is a long-standing pro
 software development and deployment. Containers have become a popular way to address this
 problem, allowing programs to be distributed in a portable fashion and to run them under strict
 security constraints. Due to the popularity of this approach, its use has started to extend
-beyond its original aim, with users often create containers bundling entire Linux distributions
+beyond its original aim, with users often creating containers bundling entire Linux distributions
 to run mundane executables, incurring in hidden performance and maintenance costs.
 This paper presents an alternative approach to the problem of versioning resolution applied
 to locally-installed applications, through a virtualization tool integrated into the core
@@ -101,8 +101,6 @@ The remaining of the paper is organized as follows. Section~\ref{sec:foo} presen
 
 \section{Prior art}
 
-Write about AppImages.
-
 \textbf{Snap.}
 Snap is a technology built for creating and distributing universal packages on Linux-based
 operating systems. Proposed by Canonical, the format is based on a read-only SquashFS filesystem
@@ -124,6 +122,7 @@ environments), most interfaces need to be manually connected by the user. Lastly
 an entire ecosystem of dependencies is encapsulated in a Snap package, there can be several
 redundant files replicated over Snap packages of different applications.
 
+\textbf{Flatpak.}
 Flatpak serves the same purpose as Snap: it provides a mechanism to distribute packages
 across Linux-based distributions in a portable fashion. Differently from Snap, Flatpak
 uncompresses and stores the packages in the target filesystem under a shared directory
@@ -138,7 +137,17 @@ contained as well as of the system calls and resources it uses.
 
 \textbf{Docker.}
 Explain how Docker~\cite{fink2014:docker} works.
-\lipsum[1-2]
+
+\textbf{AppImages.}
+Differently from the aforementioned platforms, AppImages do not aim at creating a
+secure execution environment for the applications. Rather, it focuses on providing
+a single executable file that can run without requiring administration privileges.
+AppImages embed the target program and its dependencies in a filesystem image file
+(either an ISO9660, as used by optical disc media, or a compressed SquashFS image).
+That image is wrapped by a statically linked executable file that ``mounts'' the
+embedded filesystem image and seamlessly executes the application. Like Snap
+packages, AppImages leads to a duplication of dependency files across different
+bundles.
 
 The approaches presented above all package an application for execution inside one file,
 that functions as a separate file system. An alternative approach is to organize the
