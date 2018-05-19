@@ -189,7 +189,7 @@ A number of efforts have addressed this problem over the years, aiming for a reo
 of the operating system's file structure with versioning in mind. Some of them are presented below.
 
 \textbf{GoboLinux.}
-GoboLinux~\cite{GoboLinux} was the first Linux distribution to present a fully versioned
+GoboLinux~\cite{muhammad2002:wsl} was the first Linux distribution to present a fully versioned
 file system structure. Instead of having programs installed to traditional Unix paths
 like \texttt{/usr/bin}, \texttt{/etc} and \texttt{/usr/share/something}, on GoboLinux
 each program gets its own version directory subtree.
@@ -209,7 +209,7 @@ configured by the user. In order to enable existing programs and scripts from ru
 without modifications on the top of this filesystem tree, the base \texttt{/System/Index}
 directory is mapped to \texttt{/usr}, resulting in fully-compatible Unix paths.
 The compatibility links are hidden from userspace programs for aesthetical reasons
-by an optional kernel extension developed by the distribution~\cite{GoboHide}.
+by an optional kernel extension developed by the distribution~\cite{damasio2003:gobohide}.
 
 \textbf{GNU Guix.}
 GNU Guix~\cite{courtes2013:guix} is a transactional package manager based on Nix~\cite{dolstra2004:nix}.
@@ -408,7 +408,7 @@ proven itself useful in a variety of pratical situations.
 \textbf{Running multiple compilers.}
 There are various use cases in which one needs to run a specific version of
 a compiler: sometimes long-term maintenance of software often requires running
-old compilers; at other times, certain software such as CUDA~\cite{XXX}
+old compilers; at other times, certain software such as CUDA~\cite{nickolls2008:cuda}
 depends on specific versions of the host language compiler.
 
 Installing multiple versions of compiler toolchains is a non-trivial task on regular
@@ -433,7 +433,7 @@ One notable example is Adobe Reader, which is no longer updated on Linux since
 2013. While many open source alternative PDF readers are available for Linux,
 a number of existing documents use Adobe's proprietary extensions, such as
 support for embedded 3D objects, and XFA forms sometimes required by
-government agencies. As of this writing, Adobe still publishes the last
+government agencies~\cite{grantsgov:adobe}. As of this writing, Adobe still publishes the last
 version built for Linux online, but is only available as a 32-bit binary,
 and depends on libraries which are no longer available in any current Linux
 system. Adobe Reader 9.5.5 can be launched in a contemporary GoboLinux
