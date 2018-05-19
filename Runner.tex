@@ -80,8 +80,17 @@ container images~\cite{fink2014:docker} that became possible thanks to advanceme
 architectures~\cite{uhlig2005:vtx, amd2005:svm} and in operating systems support for virtualization
 ~\cite{russell2008:virtio, dall2014:kvm+arm, kivity2007:kvm}. 
 
-\textbf{XXX mention very briefly how virtualization and containerization works.}
-\lipsum[1]
+The core idea behind containers is to leverage process isolation capabilities to the operating
+system (OS) rather than running a full instance of an OS on virtual hardware. Linux, for instance,
+builds this concept on three features:
+\emph{kernel namespaces}, which allows the creation of separate instances of previously global
+namespaces,
+\emph{control groups} (cgroups), which groups processes and manage their aggregate resource
+consumption~\cite{brown2014:cgroups}, and
+\emph{seccomp}, a facility that enables the creation of filters to limit which system calls
+an application can use~\cite{lwn2015:seccomp}. Together, these features provide the foundation
+for running sandboxed processes with a performance close to bare metal in many
+workloads~\cite{felter2015:comparison}.
 
 In spite of their success, an ever growing number of mundane programs gained their containerized version,
 even when those have no dependencies other than basic system libraries. As a result, users end up
@@ -108,11 +117,9 @@ to versioned directory systems (GoboLinux, Nix/Guix, Homebrew).
 \textbf{Docker.}
 Docker has emerged in the recent years as a standard runtime, image format, and build
 system for Linux containers~\cite{fink2014:docker}. Security of processes confined in
-containers is controlled via Linux Seccomp, a facility that enables the creation of
-filters that can be used to limit which system calls an application can
-invoke~\cite{lwn2015:seccomp}.
-Aggregate resource consumption of CPU, network bandwidth, and memory is managed by the Linux
-Control Groups (cgroups) subsystem~\cite{brown2014:cgroups}. A key feature of Docker
+containers is controlled via Linux seccomp, whereas slices of CPU, network bandwidth,
+and memory resources provided to the container are configured through the cgroups
+subsystem. A key feature of Docker
 absent from most other container solutions is the use of layered filesystem images:
 a single operating system image can be used as a basis for many containers while allowing
 them to persist writes in their own private spaces. This design leads to significant
@@ -158,7 +165,7 @@ across Linux-based distributions in a portable fashion. Differently from Snap, F
 uncompresses and stores the packages in the target filesystem under a shared directory
 that contains data from other Flatpak packages. By doing so, Flatpak is able to detect
 redundant files and to store only a single copy of the files. That is achieved with the
-use of hard links. Limits are managed through Linux Seccomp.
+use of hard links. Limits are managed through the Linux seccomp subsystem.
 Several namespace settings also exist to control access to the network and to other
 processes outside the sandbox. As with Snap and Docker, fine tuning such rules requires a deep
 knowledge of the application being contained as well as of the system calls and resources
