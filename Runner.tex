@@ -2,6 +2,7 @@
 \usepackage{booktabs} % For formal tables
 \usepackage{lipsum}
 \usepackage{fancyvrb}
+\usepackage{float}
 \newcommand{\shell}[1]{\\\texttt{\footnotesize\$ #1}\\}
 
 \begin{document}
@@ -332,7 +333,7 @@ implementation of AlienVS:
         are obtained from \emph{packlist} manifests under the directories reported
         by the \texttt{perldoc} utility;
     \item LuaRocks: installed Lua modules along with their paths are retrieved
-        through interaction with the \texttt{luarocks} package manager;
+        through interaction with the \texttt{lua\-rocks} package manager;
     \item PIP and PIP3: the lists of files installed by Python 2.x and 3.x modules
         are obtained by parsing Egg-Info and Dist-Info manifests;
     \item RubyGems: implements support for Ruby modules. The module search location
@@ -410,7 +411,7 @@ one installed version, then any existing files from other versions of that
 dependency are removed from the private mount point of that process. This
 ensures that only a single version of a dependency is ``active'' at a time.
 
-Put it simply, if a program depends on a given library `/usr/lib/libfoo.so` and it
+Put it simply, if a program depends on a given library `/usr/lib/lib\-foo.so` and it
 needs it to be specifically of version 1.2.3, Runner will ensure that it is
 version 1.2.3.
 
@@ -431,7 +432,7 @@ The layout of the filesystem tree we defined on GoboLinux includes a symbolic li
 \texttt{lib64 $\rightarrow$ lib} for backwards compatibility purposes alone so that
 an executable searching for that directory can find it.
 
-Again, if a program depends on a given library `/usr/lib/libfoo.so` and it
+Again, if a program depends on a given library `/usr/lib/lib\-foo.so` and it
 needs it to be specifically 32-bit (even if the rest of the system sees it
 as 64-bit), Runner will ensure that it is 32-bit.
 
@@ -459,6 +460,13 @@ executables that are able to run natively in that system as well. Even if one
 were able to run a compiler from a container, it would produce binaries dependent
 on the libraries stored in that container.
 
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=.75\textwidth]{Runner.png}
+    \caption{Running an executable built for another architecture with Runner}
+    \label{fig:runner}
+\end{figure*}
+
 \textbf{Satisfying dependencies for proprietary software.}
 A practical challenge in software deployment is how to keep in use
 proprietary software that works but is unsupported by the original developer.
@@ -477,6 +485,7 @@ and depends on libraries which are no longer available in any current Linux
 system. Adobe Reader 9.5.5 can be launched in a contemporary GoboLinux
 64-bit system using Runner's support for multiple architectures,
 reusing packages from previous GoboLinux versions for its dependencies.
+This scenario is depicted in Figure~\ref{fig:runner}.
 
 \section{Conclusion}\label{sec:conclusion}
 Containers are a proven technology that enables the confined execution of
