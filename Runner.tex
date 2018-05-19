@@ -410,7 +410,7 @@ one installed version, then any existing files from other versions of that
 dependency are removed from the private mount point of that process. This
 ensures that only a single version of a dependency is ``active'' at a time.
 
-In short, if a program depends on a given library `/usr/lib/libfoo.so` and it
+Put it simply, if a program depends on a given library `/usr/lib/libfoo.so` and it
 needs it to be specifically of version 1.2.3, Runner will ensure that it is
 version 1.2.3.
 
@@ -498,8 +498,9 @@ no storage waste due to the replication of dependency files. Also, through
 such a hierarchy, it is possible to keep packages belonging to different
 versions of the distribution installed at the same time. That enables the
 realization of interesting scenarios with Runner, such as letting one run
-every program ever released with zero configuration, as long as all related
-packages are uncompressed under the versioned directory structure.
+every program ever released for the distribution with zero configuration,
+as long as all related packages are uncompressed under the versioned
+directory structure.
 
 In the near future we intend to work on ...
 
