@@ -47,6 +47,38 @@ including support for third-party packages like those installed by programming l
 package managers such as Python's PIP.
 \end{abstract}
 
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10011007.10010940.10010941.10010949.10003512</concept_id>
+<concept_desc>Software and its engineering~File systems management</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10011007.10010940.10010941.10010949.10010957</concept_id>
+<concept_desc>Software and its engineering~Process management</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10011007.10011006.10011008.10011024.10011031</concept_id>
+<concept_desc>Software and its engineering~Modules / packages</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10011007.10010940.10010941.10010942.10010948</concept_id>
+<concept_desc>Software and its engineering~Virtual machines</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Software and its engineering~File systems management}
+\ccsdesc[500]{Software and its engineering~Process management}
+\ccsdesc[500]{Software and its engineering~Modules / packages}
+\ccsdesc[500]{Software and its engineering~Virtual machines}
+
+\keywords{dependency resolution, software deployment, virtualization, containers}
+
 \maketitle
 
 \section{Introduction}
@@ -468,6 +500,14 @@ We have developed and deployed our system integrating it into a Linux-based
 distribution. In this section, we report our experiences using it, and the ways it has
 proven itself useful in a variety of pratical situations.
 
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=.75\textwidth]{Runner.png}
+    \caption{Using Runner to launch Adobe Reader (32-bit, from 2010) alongside Chrome (64-bit, from 2018)}
+    \label{fig:runner}
+\end{figure*}
+
+
 \textbf{Running multiple compilers.}
 There are various use cases in which one needs to run a specific version of
 a compiler: sometimes long-term maintenance of software requires running
@@ -511,13 +551,6 @@ can run 32-bit and 64-bit applications in parallel in those systems (for example
 to launch recent builds of 32-bit versions of the Firefox browser
 using unmaintained plugins), it would be hardly possible for them to
 launch legacy binaries, as we demonstrate here with Runner.
-
-\begin{figure*}[!ht]
-    \centering
-    \includegraphics[width=.75\textwidth]{Runner.png}
-    \caption{Using Runner to launch Adobe Reader (32-bit, from 2010) alongside Chrome (64-bit, from 2018)}
-    \label{fig:runner}
-\end{figure*}
 
 \section{Conclusion}\label{sec:conclusion}
 Containers are a proven technology that enables the confined execution of
