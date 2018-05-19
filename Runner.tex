@@ -130,13 +130,20 @@ that contains data from other Flatpak packages. By doing so, Flatpak is able to 
 redundant files and to store only a single copy of the files. That is achieved with the
 use of hard links. Limits are managed through Linux Seccomp, a facility that enables
 the creation of filters that, on Flatpak, can be used to disable certain system calls
-issued by the application~\cite{lwn2015:seccomp}. Several private namespace settings
-also exist to control access to the network and to other processes outside the sandbox.
+issued by the application~\cite{lwn2015:seccomp}. Several namespace settings also exist
+to control access to the network and to other processes outside the sandbox.
 As with Snap, fine tuning such rules requires a deep knowledge of the application being
 contained as well as of the system calls and resources it uses.
 
 \textbf{Docker.}
-Explain how Docker~\cite{fink2014:docker} works.
+Docker has emerged in the recent years as a standard runtime, image format, and build
+system for Linux containers. Security of confined processes is controlled via Linux
+Seccomp, whereas aggregate resource consumption is managed by the Linux Control Groups
+(cgroups) subsystem~\cite{fink2014:docker}. A key feature of Docker absent from most
+other container solutions is the use of layered filesystem images: a single operating
+system image can be used as a basis for many containers while allowing them to persist
+writes in their own private spaces. This design leads to significant storage savings
+when multiple containers are created from a same base image~\cite{felter2015:comparison}.
 
 \textbf{AppImages.}
 Differently from the aforementioned platforms, AppImages do not aim at creating a
