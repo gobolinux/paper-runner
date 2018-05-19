@@ -38,7 +38,7 @@ software development and deployment. Containers have become a popular way to add
 problem, allowing programs to be distributed in a portable fashion and to run them under strict
 security constraints. Due to the popularity of this approach, its use has started to extend
 beyond its original aim, with users often creating containers bundling entire Linux distributions
-to run mundane executables, incurring in hidden performance and maintenance costs.
+to run mundane executables, incurring hidden performance and maintenance costs.
 This paper presents an alternative approach to the problem of versioning resolution applied
 to locally-installed applications, through a virtualization tool integrated into the core
 of a Linux distribution. This tool multiplexes the root filesystem according to the
@@ -83,15 +83,15 @@ package managers such as Python's PIP.
 
 \section{Introduction}
 Dependency hell is an old problem that haunts users wishing to install programs depending on
-different and often conflicting versions of a given package. That is the case of non-versioned
+different and often conflicting versions of a given package. That is the case for non-versioned
 libraries that attempt to overwrite files from a previous installation, effectively preventing
 concurrent versions of that library from coexisting. The same is true for packages whose executable
-names does not change across releases; unless the user renames the existing executable file names
+names does not change across releases; unless the user renames the existing executable files
 prior to the installation of a new version it is not possible to keep both installations around.
 The problem with that approach is that it breaks package managers, as the renamed files will not
 be featured in the package manager's database and, consequently, will not be tracked anymore. Further, 
 unless executables depending on the renamed files are modified to reflect their new path, users need
-to define which executable to activate at a given time, usually through a tricky management of
+to define which executable to activate at a given time, usually through tricky management of
 symbolic links~\cite{redhat2002:alternatives}.
 
 Besides the historical lack of support for seamlessly managing the installation and runtime
@@ -108,11 +108,11 @@ Many approaches have emerged through the years to work around the problem. In co
 encapsulation techniques that let software vendors ship their programs along with their dependencies
 in a single file and that let users execute said software effortlessly. Virtual machine images
 became a very popular distribution format in the early 2000's~\cite{smith2005:vm}, followed more recently by
-container images~\cite{fink2014:docker} that became possible thanks to advancements in microprocessor
+container images~\cite{fink2014:docker}, which became possible thanks to advancements in microprocessor
 architectures~\cite{uhlig2005:vtx, amd2005:svm} and in operating systems support for virtualization
 ~\cite{russell2008:virtio, dall2014:kvm+arm, kivity2007:kvm}. 
 
-The core idea behind containers is to leverage process isolation capabilities to the operating
+The core idea behind containers is to leverage process isolation capabilities of the operating
 system (OS) rather than running a full instance of an OS on virtual hardware. Linux, for instance,
 builds this concept on three features:
 \emph{kernel namespaces}, which allows the creation of separate instances of previously global
@@ -128,7 +128,7 @@ In spite of their success, an ever growing number of mundane programs gained con
 even when those have no dependencies other than basic system libraries. As a result, users end up
 with several full-blown copies of operating system images that need to be managed in addition to
 the regular package management for fundamental operating system services. While the excessive use
-of disk space often not is not a major concern, the fact that these containers include several
+of disk space often is not a major concern, the fact that these containers include several
 libraries that need to be tracked for security updates can be a problem: if a vulnerability is
 discovered in a system library, it needs to be patched not only once in the root system, but
 also inside each container that happens to use that library, a dependency relation that is
@@ -142,7 +142,7 @@ it makes interconnections between components more explicit and secure. For
 end-user-oriented applications and even local development, however, this adds
 a layer of complexity compared to regular package installations, which often
 requires much finer grained control than offered by containers. Even at the
-coarser grain they operate, the subleties involved in correctly connecting
+coarser grain at which they operate, the subleties involved in correctly connecting
 containers led to the development of helper tools like Docker
 Compose~\cite{compose2018} and eventually orchestration tools such as
 Kubernetes~\cite{brewer2015:kube}. The success of container-based approaches
@@ -153,9 +153,9 @@ kinds of software deployment.
 This paper presents a novel approach to the management and execution of
 locally-installed programs, addressing the issue of dependency conflicts based
 solely on the layout of the filesystem hierarchy and on private process
-namespaces. Our lightweight proposal to filesystem virtualization has been
+namespaces. Our lightweight proposal of filesystem virtualization has been
 fully integrated into a Linux-based distribution and includes support for both
-basic programs (such as those typically managed by RPM and DEB) and those
+basic programs (such as those typically managed by RPM and APT) and those
 managed by third-party software such as PIP and LuaRocks.
 
 The remaining of the paper is organized as follows.
@@ -174,7 +174,7 @@ packages wrapping programs with their dependencies (Flatpak, AppImages),
 to versioned directory systems (GoboLinux, Nix/Guix, Homebrew).
 
 \subsection{Docker}
-Docker has emerged in the recent years as a standard runtime, image format, and build
+Docker has emerged in recent years as a standard runtime, image format, and build
 system for Linux containers~\cite{fink2014:docker}. Security of processes confined in
 containers is controlled via Linux seccomp, whereas slices of CPU, network bandwidth,
 and memory resources provided to the container are configured through the cgroups
@@ -226,14 +226,14 @@ that contains data from other Flatpak packages. By doing so, Flatpak is able to 
 redundant files and to store only a single copy of the files. That is achieved with the
 use of hard links. Limits are managed through the Linux seccomp subsystem.
 Several namespace settings also exist to control access to the network and to other
-processes outside the sandbox. As with Snap and Docker, fine tuning such rules requires a deep
+processes outside the sandbox. As with Snap and Docker, fine-tuning such rules requires a deep
 knowledge of the application being contained as well as of the system calls and resources
 it uses.
 
 \subsection{AppImages}
 Differently from the aforementioned platforms, AppImages do not aim at creating a
-secure execution environment for the applications. Rather, it focuses on providing
-a single executable file that can run without requiring administration privileges.
+secure execution environment for the applications. Rather, they focus on providing
+a single executable file that can run without requiring administrative privileges.
 AppImages embed the target program and its dependencies in a filesystem image file
 (either an ISO9660, as used by optical disc media, or a compressed SquashFS image).
 That image is wrapped by a statically linked executable file that ``mounts'' the
@@ -271,10 +271,10 @@ files are indexed via symbolic links on \texttt{/System/Index};
 that directory contains the typical Unix directories, like \texttt{bin}, \texttt{include}
 and \texttt{lib}. The files inside these directories are symbolic links to the
 most recent version of each program installed on the system or, alternatively, to a version
-configured by the user. In order to enable existing programs and scripts from running
+configured by the user. In order to enable existing programs and scripts to run
 without modifications on the top of this filesystem tree, the base \texttt{/System/Index}
 directory is mapped to \texttt{/usr}, resulting in fully-compatible Unix paths.
-The compatibility links are hidden from userspace programs for aesthetical reasons
+The compatibility links are hidden from userspace programs for aesthetic reasons
 by an optional kernel extension developed by the distribution~\cite{damasio2003:gobohide}.
 
 \subsection{GNU Guix}
@@ -285,7 +285,7 @@ Such prefixes include the program name and a hash string that is calculated over
 build inputs. For instance, two distinct versions of the Python interpreter could be installed
 under \texttt{/gnu/store/}\textit{sha256-hash}\texttt{-python-2.7.12} and \texttt{/gnu/store/}\textit{sha256-hash}\texttt{-pyth\-on-3.6.0},
 each of which having their own \texttt{bin}, \texttt{include}, \texttt{lib}, and \texttt{share}
-subdirectories. If another builds of Python 2.7.12 were to be installed (using different optimization
+subdirectories. If another build of Python 2.7.12 were to be installed (using different optimization
 flags, for example) then a different hash would be computed for that particular build, enabling its
 installation on a different prefix than the old version of that same program. There is an entire
 distribution called GuixSD that is built around GNU Guix.
@@ -309,7 +309,7 @@ elsewhere.
 
 \subsection{Homebrew}
 Homebrew~\cite{homebrew} is a general-purpose package manager for macOS. Being a third-party project,
-it does not manage core system packages provided by the OS, neither applications installed
+it does not manage core system packages provided by the OS, nor applications installed
 into the standard Mac \texttt{/Applications} directory. Instead, it constructs its own
 subtree where programs are installed into versioned isolated subdirectories, indexed
 by a separate symbolic link tree, inspired by the model of
@@ -338,9 +338,9 @@ in a rather unique way.
 
 \subsubsection*{Dependency resolution}
 Runner works by creating private mounts for each program it executes. The
-private mounts are composed by \texttt{/Sys\-tem/Index} with overlays mounts
+private mounts are composed of \texttt{/Sys\-tem/Index} with overlay mounts
 of each dependency of that program. The dependency list can be given either
-explicitly with a plain text \texttt{Dependencies} file or implicitly by
+explicitly with a plain-text \texttt{Dependencies} file or implicitly by
 inferring the location where that program is installed. If the executable
 happens to come from a subtree of  the default GoboLinux location
 (\texttt{/Programs}), then that program's \texttt{Resources/Dependencies}
@@ -395,19 +395,19 @@ Again, if an executable depends on a given library \texttt{/usr/\-lib/lib\-foo.s
 needs it to be specifically 32-bit (even if the rest of the system sees it
 as 64-bit), Runner will ensure that it is 32-bit.
 
-The Linux Hierarchy Standard (LHS)~\cite{lsb2015:fhs} defines support for
+The Filesystem Hierarchy Standard (LHS)~\cite{lsb2015:fhs} defines support for
 multiarch libraries (e.g., libraries built for i686 on an x86-64 platform)
 through directories named \texttt{/lib32} and \texttt{/lib64},
 where 32 and 64 are determined according to the architecture's pointer size.
 This solution does not work well once multiple 64 or 32-bit architectures must
 be supported due to namespace conflicts. An alternative method would be to define
 multiple suffixes that reflect the target architecture, such as \texttt{/lib\_ia64}
-and \texttt{/lib\_x64\_64}, but the number of library directories quickly grow and
-difficults the maintenance of fundamental system services~\cite{heen2005:thesis}.
+and \texttt{/lib\_x64\_64}, but the number of library directories quickly grows and
+complicates the maintenance of fundamental system services~\cite{heen2005:thesis}.
 %Although the layout of the filesystem tree defined on GoboLinux includes a symbolic link
 %\texttt{lib64 $\rightarrow$ lib}, it is meant for backwards compatibility purposes so that
 %an executable searching for that directory can find it.
-The filesystem virtualization featured on Runner eliminates this
+The filesystem virtualization featured in Runner eliminates this
 problem in an elegant way as described above.
 
 \subsection{Augmented filesystem tree}
@@ -443,7 +443,7 @@ bin  sqlparse  sqlparse-0.2.4.dist-info
 
 AlienVFS creates an in-memory mapping of the programming language modules installed
 by either interacting with the corresponding package manager or by parsing manifest
-files found in well known locations. The same approach is used to determine the
+files found in well-known locations. The same approach is used to determine the
 name and version of the modules that are used to compose the top-level directories
 of the virtual filesystem tree. The following backends are supported by our initial
 implementation of AlienVS:
@@ -497,7 +497,7 @@ LuaRocks:lanes        PostgreSQL
 \end{figure*}
 
 The merged layout makes it easier for users to navigate their filesystem tree
-and inspect programming modules files of their interest. Further, it enables a
+and inspect programming-module files of their interest. Further, it enables a
 much simpler implementation of dependency checkers: as long as the expected
 directory exists under \texttt{/Programs}, the dependency is met, no matter if the
 dependency is a regular program or a programming language module.
@@ -536,7 +536,7 @@ One notable example is Adobe Reader, which is no longer updated on Linux since
 a number of existing documents use Adobe's proprietary extensions, such as
 support for embedded 3D objects, and XFA forms sometimes required by
 government agencies~\cite{grantsgov:adobe}. As of this writing, Adobe still publishes the last
-version built for Linux online, but is only available as a 32-bit binary,
+version built for Linux online, but it is only available as a 32-bit binary,
 and depends on libraries which are no longer available in any current Linux
 system. Adobe Reader 9.5.5 can be launched in a contemporary GoboLinux
 64-bit system using Runner's support for multiple architectures,
@@ -563,8 +563,8 @@ dependencies to coexist in the same filesystem hierarchy and that enables
 their execution through filesystem multiplexing. Our proposal extends to
 packages managed by third-party software (such as those in charge of
 installing programming language modules) by way of another contribution
-made known in this paper: the unification of such packages under a well
-structured virtual filesystem.
+made known in this paper: the unification of such packages under a
+well-structured virtual filesystem.
 
 Because of the directory hierarchy we built our solution upon, there is
 no storage waste due to the replication of dependency files. Also, through
