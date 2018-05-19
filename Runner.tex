@@ -487,10 +487,18 @@ system. Adobe Reader 9.5.5 can be launched in a contemporary GoboLinux
 reusing packages from previous GoboLinux versions for its dependencies.
 This scenario is depicted in Figure~\ref{fig:runner}.
 
+Note that even when regular Linux distributions do offer multiarch support
+with two sets of libraries for 32-bit and 64-bit, they offer only the most
+recent versions available for each set of libraries. Therefore, even if one
+can run 32-bit and 64-bit applications in parallel in those systems (for example,
+to launch recent builds of 32-bit versions of the Firefox browser
+using unmaintained plugins), it would be hardly possible for them to
+launch legacy binaries, as we demonstrate here with Runner.
+
 \begin{figure*}[!ht]
     \centering
     \includegraphics[width=.75\textwidth]{Runner.png}
-    \caption{Running an executable built for another architecture with Runner}
+    \caption{Using Runner to launch Adobe Reader (32-bit, from 2010) alongside Chrome (64-bit, from 2018)}
     \label{fig:runner}
 \end{figure*}
 
