@@ -5,7 +5,7 @@
 \newcommand{\shell}[1]{\\\texttt{\footnotesize\$ #1}\\}
 
 \begin{document}
-\title{Filesystem virtualization without containers}
+\title{Dependency Heaven: Conflict Resolution via Containerless Filesystem Virtualization}
 
 \author{Void}
 \orcid{1234-5678-9012}
@@ -410,10 +410,14 @@ one installed version, then any existing files from other versions of that
 dependency are removed from the private mount point of that process. This
 ensures that only a single version of a dependency is ``active'' at a time.
 
+In short, if a program depends on a given library `/usr/lib/libfoo.so` and it
+needs it to be specifically of version 1.2.3, Runner will ensure that it is
+version 1.2.3.
+
 XXX write about multiarch support (ELF + Resources/Architecture)
 \lipsum[7]
 
-\textbf{XXX fit this paragraph with the multiarch section.}
+\textbf{XXX fit this paragraph with the multiarch section above.}
 The Linux Hierarchy Standard (LHS)~\cite{lsb2015:fhs} defines support for
 multiarch libraries (e.g., libraries built for i686 on an x86-64 platform)
 through directories named \texttt{/lib32} and \texttt{/lib64},
@@ -426,6 +430,10 @@ difficults the maintenance of fundamental system services~\cite{heen2005:thesis}
 The layout of the filesystem tree we defined on GoboLinux includes a symbolic link
 \texttt{lib64 $\rightarrow$ lib} for backwards compatibility purposes alone so that
 an executable searching for that directory can find it.
+
+Again, if a program depends on a given library `/usr/lib/libfoo.so` and it
+needs it to be specifically 32-bit (even if the rest of the system sees it
+as 64-bit), Runner will ensure that it is 32-bit.
 
 XXX write about Resources/Environment
 \lipsum[8]
