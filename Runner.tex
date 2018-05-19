@@ -173,6 +173,7 @@ the various approaches, ranging from full-fledged containers (Docker, Snap),
 packages wrapping programs with their dependencies (Flatpak, AppImages),
 to versioned directory systems (GoboLinux, Nix/Guix, Homebrew).
 
+\vspace{1mm}
 \textbf{Docker.}
 Docker has emerged in the recent years as a standard runtime, image format, and build
 system for Linux containers~\cite{fink2014:docker}. Security of processes confined in
@@ -197,6 +198,7 @@ variables, among others. A myriad of configuration options is also available to
 restrict access of a Docker container to the resources provided by the
 host~\cite{krochmalski2016:docker}.
 
+\vspace{1mm}
 \textbf{Snap.}
 Snap is a technology built for creating and distributing universal packages on Linux-based
 operating systems. Proposed by Canonical, the format is based on a read-only SquashFS filesystem
@@ -218,6 +220,7 @@ environments), most interfaces need to be manually connected by the user. Lastly
 an entire ecosystem of dependencies is encapsulated in a Snap package, there can be several
 redundant files replicated over Snap packages of different applications.
 
+\vspace{1mm}
 \textbf{Flatpak.}
 Flatpak serves the same purpose as Snap: it provides a mechanism to distribute packages
 across Linux-based distributions in a portable fashion. Differently from Snap, Flatpak
@@ -230,6 +233,7 @@ processes outside the sandbox. As with Snap and Docker, fine tuning such rules r
 knowledge of the application being contained as well as of the system calls and resources
 it uses.
 
+\vspace{1mm}
 \textbf{AppImages.}
 Differently from the aforementioned platforms, AppImages do not aim at creating a
 secure execution environment for the applications. Rather, it focuses on providing
@@ -254,6 +258,7 @@ also arise outside of core packages.
 A number of efforts have addressed this problem over the years, aiming for a reorganization
 of the operating system's file structure with versioning in mind. Some of them are presented below.
 
+\vspace{1mm}
 \textbf{GoboLinux.}
 GoboLinux~\cite{muhammad2002:wsl} was the first Linux distribution to present a fully versioned
 file system structure. Instead of having programs installed to traditional Unix paths
@@ -277,6 +282,7 @@ directory is mapped to \texttt{/usr}, resulting in fully-compatible Unix paths.
 The compatibility links are hidden from userspace programs for aesthetical reasons
 by an optional kernel extension developed by the distribution~\cite{damasio2003:gobohide}.
 
+\vspace{1mm}
 \textbf{GNU Guix.}
 GNU Guix~\cite{courtes2013:guix} is a transactional package manager based on Nix~\cite{dolstra2004:nix}.
 It supports transactional upgrades and
@@ -307,6 +313,7 @@ such modules will be installed under their corresponding Python/Guile/Perl/etc d
 under \texttt{/gnu/store} unless the corresponding third-party managers are told to install them
 elsewhere.
 
+\vspace{1mm}
 \textbf{Homebrew.}
 Homebrew~\cite{homebrew} is a general-purpose package manager for macOS. Being a third-party project,
 it does not manage core system packages provided by the OS, neither applications installed
@@ -336,6 +343,7 @@ wrappers recently introduced on Guix, but suitable to the layout of the
 \texttt{/Programs} tree and supporting multiarch executables and libraries
 in a rather unique way.
 
+\vspace{1mm}
 \textbf{Dependency resolution.}
 Runner works by creating private mounts for each program it executes. The
 private mounts are composed by \texttt{/Sys\-tem/Index} with overlays mounts
@@ -369,12 +377,14 @@ Put it simply, if a program depends on a given library \texttt{/usr/lib/lib\-foo
 needs it to be specifically of version 1.2.3, Runner will ensure that it is
 version 1.2.3.
 
+\vspace{1mm}
 \textbf{Environment settings.}
 Another metadata file processed by Runner is \texttt{Resources/\-Environment}.
 That file contains environment variables that must be exported to the
 program it will run, such as \$PY\-THONPATH (defined by the Python package)
 and \$GTK\_\-PATH (defined by GTK+).
 
+\vspace{1mm}
 \textbf{Multiarch support.}
 Runner also supports running executables built for another architecture.
 When given a random ELF executable to run along with a Dependencies file,
@@ -508,6 +518,7 @@ proven itself useful in a variety of pratical situations.
 \end{figure*}
 
 
+\vspace{1mm}
 \textbf{Running multiple compilers.}
 There are various use cases in which one needs to run a specific version of
 a compiler: sometimes long-term maintenance of software requires running
@@ -524,6 +535,7 @@ executables that are able to run natively in that system as well. Even if one
 were able to run a compiler from a container, it would produce binaries dependent
 on the libraries stored in that container.
 
+\vspace{1mm}
 \textbf{Satisfying dependencies for proprietary software.}
 A practical challenge in software deployment is how to keep in use
 proprietary software that works but is unsupported by the original developer.
