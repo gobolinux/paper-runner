@@ -107,16 +107,28 @@ to versioned directory systems (GoboLinux, Nix/Guix, Homebrew).
 
 \textbf{Docker.}
 Docker has emerged in the recent years as a standard runtime, image format, and build
-system for Linux containers~\cite{fink2014:docker}. Security of confined processes is
-controlled via Linux Seccomp, a facility that enables the creation of filters that can
-be used to limit which system calls an application can invoke~\cite{lwn2015:seccomp}.
-Aggregate resource consumption such as CPU and memory limits is managed by the Linux
+system for Linux containers~\cite{fink2014:docker}. Security of processes confined in
+containers is controlled via Linux Seccomp, a facility that enables the creation of
+filters that can be used to limit which system calls an application can
+invoke~\cite{lwn2015:seccomp}.
+Aggregate resource consumption of CPU, network bandwidth, and memory is managed by the Linux
 Control Groups (cgroups) subsystem~\cite{brown2014:cgroups}. A key feature of Docker
 absent from most other container solutions is the use of layered filesystem images:
 a single operating system image can be used as a basis for many containers while allowing
 them to persist writes in their own private spaces. This design leads to significant
 storage savings when multiple containers are created from a same base
 image~\cite{felter2015:comparison}.
+Furthermore, Docker is available on non-Linux operating systems such as Windows and
+macOS where container images are launched as virtual machines under VirtualBox.
+
+Running an application distributed as a Docker container may require the user to
+specify a number of parameters at launch time. Depending on the application, it
+it may be needed to configure network port mappings between the container and the
+host operating system, network interface settings, filesystem mappings to enable
+read and write access to directories on the host's storage devices, environment
+variables, among others. A myriad of configuration options is also available to
+restrict access of a Docker container to the resources provided by the
+host~\cite{krochmalski2016:docker}.
 
 \textbf{Snap.}
 Snap is a technology built for creating and distributing universal packages on Linux-based
@@ -147,7 +159,7 @@ that contains data from other Flatpak packages. By doing so, Flatpak is able to 
 redundant files and to store only a single copy of the files. That is achieved with the
 use of hard links. Limits are managed through Linux Seccomp.
 Several namespace settings also exist to control access to the network and to other
-processes outside the sandbox. As with Snap, fine tuning such rules requires a deep
+processes outside the sandbox. As with Snap and Docker, fine tuning such rules requires a deep
 knowledge of the application being contained as well as of the system calls and resources
 it uses.
 
