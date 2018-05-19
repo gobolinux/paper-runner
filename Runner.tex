@@ -194,7 +194,7 @@ file system structure. Instead of having programs installed to traditional Unix 
 like \texttt{/usr/bin}, \texttt{/etc} and \texttt{/usr/share/something}, on GoboLinux
 each program gets its own version directory subtree.
 
-Each program is installed under its own subtree, at \texttt{/Programs/}\textit{Name}\texttt{/}\textit{Version}. That directory holds not
+Each program is installed under its own subtree, at \texttt{/Pro\-grams/}\textit{Name}\texttt{/}\textit{Version}. That directory holds not
 only the program's libraries, executables, headers, and shared files, but also metadata
 that describes in plain text files which programs it depends on,
 any environment variables that must be configured prior to running executables distributed
@@ -349,7 +349,7 @@ wrappers recently introduced on Guix, but suitable to the layout of the
 in a rather unique way.
 
 Runner works by creating private mounts for each program it executes. The
-private mounts are composed by \texttt{/System/Index} with overlays mounts
+private mounts are composed by \texttt{/Sys\-tem/Index} with overlays mounts
 of each dependency of that program. The dependency list can be given either
 explicitly with a plain text \texttt{Dependencies} file or implicitly by
 inferring the location where that program is installed. If the executable
