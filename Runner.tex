@@ -289,8 +289,15 @@ underlying model.
 
 \section{Containerless filesystem virtualization}\label{sec:our_work}
 
+In this section we present the two main contributions of this paper: a lightweight
+tool for filesystem virtualization without containers, based on a structured
+filesystem hierarchy; and an extension to this hieararchy using a virtual
+filesystem tool that presents the repositories of third-party package managers
+as part of the system's structured hierarchy, allowing them to be integrated
+into the main system's dependency management.
+
 \subsection{Lightweight filesystem virtualization without containers}
-In this section we present the first contribution of this paper. \textit{Runner} is a
+We now present the first contribution of this paper. \textit{Runner} is a
 filesystem multiplexer that we created to enable the resolution of conflicting
 dependencies at runtime. It is conceptually similar to the statically-linked
 wrappers recently introduced on Guix, but suitable to the layout of the
