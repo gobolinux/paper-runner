@@ -337,6 +337,11 @@ Put it simply, if a program depends on a given library \texttt{/usr/lib/lib\-foo
 needs it to be specifically of version 1.2.3, Runner will ensure that it is
 version 1.2.3.
 
+Another metadata file processed by Runner is \texttt{Resources/Environment}.
+That file contains environment variables that must be exported to the
+program it will run, such as \$PYTHONPATH (defined by the Python package)
+and \$GTK\_PATH (defined by GTK+).
+
 Runner also supports running executables built for another architectures.
 When given a random ELF executable to run along with a Dependencies file,
 Runner parses the ELF header to identify which architecture it was built
@@ -352,25 +357,24 @@ searched under the list of installed dependencies. This approach enables
 the correct generation of multiarch overlays for both ELF executables as
 well as shell scripts and other interpreted files.
 
+Again, if an executable depends on a given library \texttt{/usr/\-lib/lib\-foo.so} and it
+needs it to be specifically 32-bit (even if the rest of the system sees it
+as 64-bit), Runner will ensure that it is 32-bit.
+
 The Linux Hierarchy Standard (LHS)~\cite{lsb2015:fhs} defines support for
 multiarch libraries (e.g., libraries built for i686 on an x86-64 platform)
 through directories named \texttt{/lib32} and \texttt{/lib64},
 where 32 and 64 are determined according to the architecture's pointer size.
 This solution does not work well once multiple 64 or 32-bit architectures must
-be supported due to namespace conflicts. An alternative approach would be to define
+be supported due to namespace conflicts. An alternative method would be to define
 multiple suffixes that reflect the target architecture, such as \texttt{/lib\_ia64}
 and \texttt{/lib\_x64\_64}, but the number of library directories quickly grow and
 difficults the maintenance of fundamental system services~\cite{heen2005:thesis}.
-The layout of the filesystem tree we defined on GoboLinux includes a symbolic link
-\texttt{lib64 $\rightarrow$ lib} for backwards compatibility purposes alone so that
-an executable searching for that directory can find it.
-
-Again, if an executable depends on a given library \texttt{/usr/\-lib/lib\-foo.so} and it
-needs it to be specifically 32-bit (even if the rest of the system sees it
-as 64-bit), Runner will ensure that it is 32-bit.
-
-XXX write about Resources/Environment
-\lipsum[8]
+%Although the layout of the filesystem tree defined on GoboLinux includes a symbolic link
+%\texttt{lib64 $\rightarrow$ lib}, it is meant for backwards compatibility purposes so that
+%an executable searching for that directory can find it.
+The filesystem virtualization featured on Runner eliminates this
+problem in an elegant way as described above.
 
 \subsection{Augmented filesystem tree}
 We hereby present the second contribution of this paper. \textit{AlienVFS} is a novel virtual
