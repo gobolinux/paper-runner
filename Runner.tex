@@ -337,10 +337,21 @@ Put it simply, if a program depends on a given library \texttt{/usr/lib/lib\-foo
 needs it to be specifically of version 1.2.3, Runner will ensure that it is
 version 1.2.3.
 
-XXX write about multiarch support (ELF + Resources/Architecture)
-\lipsum[7]
+Runner also supports running executables built for another architectures.
+When given a random ELF executable to run along with a Dependencies file,
+Runner parses the ELF header to identify which architecture it was built
+for. If the result does not correspond to the one under which the operating
+system runs, then Runner collects dependencies from \texttt{/Programs}
+entries whose \texttt{Resources/Architecture} contents matches the target
+architecture string.
 
-\textbf{XXX fit this paragraph with the multiarch section above.}
+When the executable provided to Runner comes from an installed program
+under \texttt{/Programs}, that program's \texttt{Resources/Architecture}
+metadata file is used to identify the architecture string that must be
+searched under the list of installed dependencies. This approach enables
+the correct generation of multiarch overlays for both ELF executables as
+well as shell scripts and other interpreted files.
+
 The Linux Hierarchy Standard (LHS)~\cite{lsb2015:fhs} defines support for
 multiarch libraries (e.g., libraries built for i686 on an x86-64 platform)
 through directories named \texttt{/lib32} and \texttt{/lib64},
@@ -526,7 +537,8 @@ every program ever released for the distribution with zero configuration,
 as long as all related packages are uncompressed under the versioned
 directory structure.
 
-In the near future we intend to work on ...
+We plan on extending the engineering work we have conducted so far to
+do this and that, and to continue our research on foo so that bar.
 
 \section{Source code}
 The source code of the tools presented in this paper are available at
