@@ -377,11 +377,43 @@ network, and so on. They provide a complex infrastructure that lets system admin
 confine the execution of programs in a way that eases the control of available resources.
 
 We have developed and deployed our system on a Linux-based distribution.
+In this section, we report our experiences using it, and the ways it has
+proven itself useful in a variety of pratical situations.
 
-XXX say that we have been successfully using Runner to enable multiple GCC versions.
-That is needed by CUDA, for instance, which depends on specific versions of the compiler.
+\textbf{Running multiple compilers.}
+There are various use cases in which one needs to run a specific version of
+a compiler: sometimes long-term maintenance of software often requires running
+old compilers; at other times, certain software such as CUDA~\cite{XXX}
+depends on specific versions of the host language compiler.
 
-\lipsum[9-13]
+Installing multiple versions of compiler toolchains is a non-trivial task on regular
+Linux systems. Certain toolchain distributions are designed for stand-alone
+installation, such as cross-compilation setups, but regular compiler packages
+assume a particular toolchain and, most critically, C/C++ standard libraries, which
+are core packages on Linux. Using Runner, we are able to have full native
+toolchains installed side by side, including the C/C++ libraries, and produce
+executables that are able to run natively in that system as well. Even if one
+were able to run a compiler from a container, it would produce binaries dependent
+on the libraries stored in that container.
+
+\textbf{Satisfying dependencies for proprietary software.}
+A practical challenge in software deployment is how to keep in use
+proprietary software that works but is unsupported by the original developer.
+Open source packages can be recompiled to use newer system libraries and
+run in contemporary systems, but sometimes a program that performs
+a function for which there is no replacement is only available in binary form
+and depends on legacy packages.
+
+One notable example is Adobe Reader, which is no longer updated on Linux since
+2013. While many open source alternative PDF readers are available for Linux,
+a number of existing documents use Adobe's proprietary extensions, such as
+support for embedded 3D objects, and XFA forms sometimes required by
+government agencies. As of this writing, Adobe still publishes the last
+version built for Linux online, but is only available as a 32-bit binary,
+and depends on libraries which are no longer available in any current Linux
+system. Adobe Reader 9.5.5 can be launched in a contemporary GoboLinux
+64-bit system using Runner's support for multiple architectures,
+reusing packages from previous GoboLinux versions for its dependencies.
 
 \section{Conclusion}
 This paper presented a container-free infrastructure to manage and run programs that have
