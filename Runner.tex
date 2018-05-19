@@ -333,7 +333,7 @@ one installed version, then any existing files from other versions of that
 dependency are removed from the private mount point of that process. This
 ensures that only a single version of a dependency is ``active'' at a time.
 
-Put it simply, if a program depends on a given library \texttt{/usr/lib/libfoo.so} and it
+Put it simply, if a program depends on a given library \texttt{/usr/lib/lib\-foo.so} and it
 needs it to be specifically of version 1.2.3, Runner will ensure that it is
 version 1.2.3.
 
@@ -354,7 +354,7 @@ The layout of the filesystem tree we defined on GoboLinux includes a symbolic li
 \texttt{lib64 $\rightarrow$ lib} for backwards compatibility purposes alone so that
 an executable searching for that directory can find it.
 
-Again, if an executable depends on a given library \texttt{/usr/lib/libfoo.so} and it
+Again, if an executable depends on a given library \texttt{/usr/\-lib/lib\-foo.so} and it
 needs it to be specifically 32-bit (even if the rest of the system sees it
 as 64-bit), Runner will ensure that it is 32-bit.
 
@@ -467,13 +467,6 @@ executables that are able to run natively in that system as well. Even if one
 were able to run a compiler from a container, it would produce binaries dependent
 on the libraries stored in that container.
 
-\begin{figure*}[!ht]
-    \centering
-    \includegraphics[width=.75\textwidth]{Runner.png}
-    \caption{Running an executable built for another architecture with Runner}
-    \label{fig:runner}
-\end{figure*}
-
 \textbf{Satisfying dependencies for proprietary software.}
 A practical challenge in software deployment is how to keep in use
 proprietary software that works but is unsupported by the original developer.
@@ -493,6 +486,13 @@ system. Adobe Reader 9.5.5 can be launched in a contemporary GoboLinux
 64-bit system using Runner's support for multiple architectures,
 reusing packages from previous GoboLinux versions for its dependencies.
 This scenario is depicted in Figure~\ref{fig:runner}.
+
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=.75\textwidth]{Runner.png}
+    \caption{Running an executable built for another architecture with Runner}
+    \label{fig:runner}
+\end{figure*}
 
 \section{Conclusion}\label{sec:conclusion}
 Containers are a proven technology that enables the confined execution of
