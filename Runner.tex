@@ -92,22 +92,49 @@ an application can use~\cite{lwn2015:seccomp}. Together, these features provide 
 for running sandboxed processes with a performance close to bare metal in many
 workloads~\cite{felter2015:comparison}.
 
-In spite of their success, an ever growing number of mundane programs gained their containerized version,
+In spite of their success, an ever growing number of mundane programs gained containerized versions,
 even when those have no dependencies other than basic system libraries. As a result, users end up
 with several full-blown copies of operating system images that need to be managed in addition to
-the regular package management for fundamental operating system services.
+the regular package management for fundamental operating system services. While the excessive use
+of disk space often not is not a major concern, the fact that these containers include several
+libraries that need to be tracked for security updates can be a problem: if a vulnerability is
+discovered in a system library, it needs to be patched not only once in the root system, but
+also inside each container that happens to use that library, a dependency relation that is
+opaque to the user and to the host operating system. In that regard, containers are the modern-day
+equivalent to static linking, bringing the same kind of advantages (simplicity in deployment)
+and concerns (the application becomes responsible for all its libraries).
 
-\textbf{Falar sobre os overheads ocultos de gerenciamento de containers.}
+Containers provide not only file system isolation, but network isolation as
+well. This is a major advantage for deploying distributed systems at scale, as
+it makes interconnections between components more explicit and secure. For
+end-user-oriented applications and even local development, however, this adds
+a layer of complexity compared to regular package installations, which often
+requires much finer grained control than offered by containers. Even at the
+coarser grain they operate, the subleties involved in correctly connecting
+containers led to the development of helper tools like Docker
+Compose~\cite{compose2018} and eventually orchestration tools such as
+Kubernetes~\cite{brewer2015:kube}. The success of container-based approaches
+for deployment in the industry is a clear indicator of the good fit of this
+model for distributed systems. It is, however, not a general solution for all
+kinds of software deployment.
 
-This paper presents a novel approach to the management and execution of programs that depends
-solely on changes to the layout of the filesystem hierarchy and on private process namespaces.
-Our lightweight proposal to filesystem virtualization has been fully integrated into a Linux-based
-distribution and includes support for both basic programs (such as those typically managed by RPM
-and DEB) and those managed by third-party software such as PIP and LuaRocks.
+This paper presents a novel approach to the management and execution of
+locally-installed programs, addressing the issue of dependency conflicts based
+solely on the layout of the filesystem hierarchy and on private process
+namespaces. Our lightweight proposal to filesystem virtualization has been
+fully integrated into a Linux-based distribution and includes support for both
+basic programs (such as those typically managed by RPM and DEB) and those
+managed by third-party software such as PIP and LuaRocks.
 
-The remaining of the paper is organized as follows. Section~\ref{sec:foo} presents \ldots
+The remaining of the paper is organized as follows.
+Section~\ref{sec:prior_art} presents related work in the field of application
+deployment avoiding dependency conflicts. Section~\ref{sec:our_work} presents
+our approach for lightweight filesystem virtualization.
+Section~\ref{sec:applications} discusses some practical applications of this
+approach in real-world problems. Finally, Section~\ref{sec:conclusion}
+concludes the paper.
 
-\section{Prior art}
+\section{Prior art}\label{sec:prior_art}
 A number of different projects have emerged over the years to address the issue of
 isolated application deployment. We present here some representative examples of
 the various approaches, ranging from full-fledged containers (Docker, Snap),
@@ -260,7 +287,7 @@ Like the container-based approaches, Homebrew is limited to add-on packages on t
 a core system. Still, its enduring popularity demonstrates the feasibility of the
 underlying model.
 
-\section{Container-free filesystem virtualization}
+\section{Container-free filesystem virtualization}\label{sec:our_work}
 
 \subsection{Augmented filesystem tree}
 We hereby present the first contribution of this paper. AlienVFS is a novel virtual
@@ -403,13 +430,9 @@ an executable searching for that directory can find it.
 XXX write about Resources/Environment
 \lipsum[8]
 
-\section{Practical applications}
-Things to note: containers can limit access to underlying hardware infrastructure, segment the
-network, and so on. They provide a complex infrastructure that lets system administrators to
-confine the execution of programs in a way that eases the control of available resources.
-
-We have developed and deployed our system on a Linux-based distribution.
-In this section, we report our experiences using it, and the ways it has
+\section{Practical applications}\label{sec:applications}
+We have developed and deployed our system integrating it into a Linux-based
+distribution. In this section, we report our experiences using it, and the ways it has
 proven itself useful in a variety of pratical situations.
 
 \textbf{Running multiple compilers.}
@@ -447,7 +470,7 @@ system. Adobe Reader 9.5.5 can be launched in a contemporary GoboLinux
 64-bit system using Runner's support for multiple architectures,
 reusing packages from previous GoboLinux versions for its dependencies.
 
-\section{Conclusion}
+\section{Conclusion}\label{sec:conclusion}
 This paper presented a container-free infrastructure to manage and run programs that have
 conflicting dependencies. 
 
