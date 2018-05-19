@@ -5,7 +5,7 @@
 \newcommand{\shell}[1]{\\\texttt{\footnotesize\$ #1}\\}
 
 \begin{document}
-\title{Dependency Heaven: Conflict Resolution via Containerless Filesystem Virtualization}
+\title[Dependency Heaven: Containerless Filesystem Virtualization]{Dependency Heaven: Conflict Resolution via Containerless Filesystem Virtualization}
 
 \author{Void}
 \orcid{1234-5678-9012}
@@ -480,10 +480,10 @@ reusing packages from previous GoboLinux versions for its dependencies.
 
 \section{Conclusion}\label{sec:conclusion}
 Containers are a proven technology that enables the confined execution of
-processes under environments with strict security constraints and with
-special needs for resource throttling. However, as this paper shown,
-they impose significant administration overhead when it comes to using
-them to run mundane executables that present versioning conflicts.
+processes under environments with strict security constraints and with special
+needs for resource throttling. However, they impose significant administration
+overhead when it comes to using them to run mundane executables that present
+versioning conflicts.
 
 We presented a container-free infrastructure that enables conflicting
 dependencies to coexist in the same filesystem hierarchy and that enables
