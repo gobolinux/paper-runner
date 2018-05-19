@@ -173,8 +173,7 @@ the various approaches, ranging from full-fledged containers (Docker, Snap),
 packages wrapping programs with their dependencies (Flatpak, AppImages),
 to versioned directory systems (GoboLinux, Nix/Guix, Homebrew).
 
-\vspace{1mm}
-\textbf{Docker.}
+\subsection{Docker}
 Docker has emerged in the recent years as a standard runtime, image format, and build
 system for Linux containers~\cite{fink2014:docker}. Security of processes confined in
 containers is controlled via Linux seccomp, whereas slices of CPU, network bandwidth,
@@ -198,8 +197,7 @@ variables, among others. A myriad of configuration options is also available to
 restrict access of a Docker container to the resources provided by the
 host~\cite{krochmalski2016:docker}.
 
-\vspace{1mm}
-\textbf{Snap.}
+\subsection{Snap}
 Snap is a technology built for creating and distributing universal packages on Linux-based
 operating systems. Proposed by Canonical, the format is based on a read-only SquashFS filesystem
 image that contains the application of interest along with its dependencies. A metadata file
@@ -220,8 +218,7 @@ environments), most interfaces need to be manually connected by the user. Lastly
 an entire ecosystem of dependencies is encapsulated in a Snap package, there can be several
 redundant files replicated over Snap packages of different applications.
 
-\vspace{1mm}
-\textbf{Flatpak.}
+\subsection{Flatpak}
 Flatpak serves the same purpose as Snap: it provides a mechanism to distribute packages
 across Linux-based distributions in a portable fashion. Differently from Snap, Flatpak
 uncompresses and stores the packages in the target filesystem under a shared directory
@@ -233,8 +230,7 @@ processes outside the sandbox. As with Snap and Docker, fine tuning such rules r
 knowledge of the application being contained as well as of the system calls and resources
 it uses.
 
-\vspace{1mm}
-\textbf{AppImages.}
+\subsection{AppImages}
 Differently from the aforementioned platforms, AppImages do not aim at creating a
 secure execution environment for the applications. Rather, it focuses on providing
 a single executable file that can run without requiring administration privileges.
@@ -258,8 +254,7 @@ also arise outside of core packages.
 A number of efforts have addressed this problem over the years, aiming for a reorganization
 of the operating system's file structure with versioning in mind. Some of them are presented below.
 
-\vspace{1mm}
-\textbf{GoboLinux.}
+\subsection{GoboLinux}
 GoboLinux~\cite{muhammad2002:wsl} was the first Linux distribution to present a fully versioned
 file system structure. Instead of having programs installed to traditional Unix paths
 like \texttt{/usr/bin}, \texttt{/etc} and \texttt{/usr/share/something}, on GoboLinux
@@ -282,14 +277,13 @@ directory is mapped to \texttt{/usr}, resulting in fully-compatible Unix paths.
 The compatibility links are hidden from userspace programs for aesthetical reasons
 by an optional kernel extension developed by the distribution~\cite{damasio2003:gobohide}.
 
-\vspace{1mm}
-\textbf{GNU Guix.}
+\subsection{GNU Guix}
 GNU Guix~\cite{courtes2013:guix} is a transactional package manager based on Nix~\cite{dolstra2004:nix}.
 It supports transactional upgrades and
 roll-backs of packages through the installation of packages under unique prefixes on the filesystem.
 Such prefixes include the program name and a hash string that is calculated over the program's
 build inputs. For instance, two distinct versions of the Python interpreter could be installed
-under \texttt{/gnu/store/}\textit{sha256-hash}\texttt{-python-2.7.12} and \texttt{/gnu/store/}\textit{sha256-hash}\texttt{-python-3.6.0},
+under \texttt{/gnu/store/}\textit{sha256-hash}\texttt{-python-2.7.12} and \texttt{/gnu/store/}\textit{sha256-hash}\texttt{-pyth\-on-3.6.0},
 each of which having their own \texttt{bin}, \texttt{include}, \texttt{lib}, and \texttt{share}
 subdirectories. If another builds of Python 2.7.12 were to be installed (using different optimization
 flags, for example) then a different hash would be computed for that particular build, enabling its
@@ -313,8 +307,7 @@ such modules will be installed under their corresponding Python/Guile/Perl/etc d
 under \texttt{/gnu/store} unless the corresponding third-party managers are told to install them
 elsewhere.
 
-\vspace{1mm}
-\textbf{Homebrew.}
+\subsection{Homebrew}
 Homebrew~\cite{homebrew} is a general-purpose package manager for macOS. Being a third-party project,
 it does not manage core system packages provided by the OS, neither applications installed
 into the standard Mac \texttt{/Applications} directory. Instead, it constructs its own
@@ -343,8 +336,7 @@ wrappers recently introduced on Guix, but suitable to the layout of the
 \texttt{/Programs} tree and supporting multiarch executables and libraries
 in a rather unique way.
 
-\vspace{1mm}
-\textbf{Dependency resolution.}
+\subsubsection*{Dependency resolution}
 Runner works by creating private mounts for each program it executes. The
 private mounts are composed by \texttt{/Sys\-tem/Index} with overlays mounts
 of each dependency of that program. The dependency list can be given either
@@ -377,15 +369,13 @@ Put it simply, if a program depends on a given library \texttt{/usr/lib/lib\-foo
 needs it to be specifically of version 1.2.3, Runner will ensure that it is
 version 1.2.3.
 
-\vspace{1mm}
-\textbf{Environment settings.}
+\subsubsection*{Environment settings}
 Another metadata file processed by Runner is \texttt{Resources/\-Environment}.
 That file contains environment variables that must be exported to the
 program it will run, such as \$PY\-THONPATH (defined by the Python package)
 and \$GTK\_\-PATH (defined by GTK+).
 
-\vspace{1mm}
-\textbf{Multiarch support.}
+\subsubsection*{Multiarch support}
 Runner also supports running executables built for another architecture.
 When given a random ELF executable to run along with a Dependencies file,
 Runner parses the ELF header to identify which architecture it was built
@@ -499,10 +489,17 @@ LuaRocks:lanes        PostgreSQL
     \label{fig:alienvfs.merged}
 \end{figure}
 
+\begin{figure*}[!ht]
+    \centering
+    \includegraphics[width=.85\textwidth]{Runner.png}
+    \caption{Using Runner to launch Adobe Reader (32-bit, from 2010) alongside Chrome (64-bit, from 2018)}
+    \label{fig:runner}
+\end{figure*}
+
 The merged layout makes it easier for users to navigate their filesystem tree
 and inspect programming modules files of their interest. Further, it enables a
 much simpler implementation of dependency checkers: as long as the expected
-directory exists under \texttt{/Programs}, the dependency is met -- no matter if the
+directory exists under \texttt{/Programs}, the dependency is met, no matter if the
 dependency is a regular program or a programming language module.
 
 \section{Practical applications}\label{sec:applications}
@@ -510,16 +507,7 @@ We have developed and deployed our system integrating it into a Linux-based
 distribution. In this section, we report our experiences using it, and the ways it has
 proven itself useful in a variety of pratical situations.
 
-\begin{figure*}[!ht]
-    \centering
-    \includegraphics[width=.75\textwidth]{Runner.png}
-    \caption{Using Runner to launch Adobe Reader (32-bit, from 2010) alongside Chrome (64-bit, from 2018)}
-    \label{fig:runner}
-\end{figure*}
-
-
-\vspace{1mm}
-\textbf{Running multiple compilers.}
+\subsection{Running multiple compilers}
 There are various use cases in which one needs to run a specific version of
 a compiler: sometimes long-term maintenance of software requires running
 old compilers; at other times, certain software such as CUDA~\cite{nickolls2008:cuda}
@@ -535,8 +523,7 @@ executables that are able to run natively in that system as well. Even if one
 were able to run a compiler from a container, it would produce binaries dependent
 on the libraries stored in that container.
 
-\vspace{1mm}
-\textbf{Satisfying dependencies for proprietary software.}
+\subsection{Satisfying dependencies for proprietary software}
 A practical challenge in software deployment is how to keep in use
 proprietary software that works but is unsupported by the original developer.
 Open source packages can be recompiled to use newer system libraries and
