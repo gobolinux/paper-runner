@@ -471,8 +471,29 @@ system. Adobe Reader 9.5.5 can be launched in a contemporary GoboLinux
 reusing packages from previous GoboLinux versions for its dependencies.
 
 \section{Conclusion}\label{sec:conclusion}
-This paper presented a container-free infrastructure to manage and run programs that have
-conflicting dependencies. 
+Containers are a proven technology that enables the confined execution of
+processes under environments with strict security constraints and with
+special needs for resource throttling. However, as this paper shown,
+they impose significant administration overhead when it comes to using
+them to run mundane executables that present versioning conflicts.
+
+We presented a container-free infrastructure that enables conflicting
+dependencies to coexist in the same filesystem hierarchy and that enables
+their execution through filesystem multiplexing. Our proposal extends to
+packages managed by third-party software (such as those in charge of
+installing programming language modules) by way of another contribution
+made known in this paper: the unification of such packages under a well
+structured virtual filesystem.
+
+Because of the directory hierarchy we built our solution upon, there is
+no storage waste due to the replication of dependency files. Also, through
+such a hierarchy, it is possible to keep packages belonging to different
+versions of the distribution installed at the same time. That enables the
+realization of interesting scenarios with Runner, such as letting one run
+every program ever released with zero configuration, as long as all related
+packages are uncompressed under the versioned directory structure.
+
+In the near future we intend to work on ...
 
 \section{Source code}
 The source code of the tools presented in this paper are available at
