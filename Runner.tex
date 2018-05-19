@@ -371,7 +371,7 @@ LuaRocks:lanes        PostgreSQL
 The merged layout makes it easier for users to navigate their filesystem tree
 and inspect programming modules files of their interest. Further, it enables a
 much simpler implementation of dependency checkers: as long as the expected
-directory exists under /Programs, the dependency is met -- no matter if the
+directory exists under \texttt{/Programs}, the dependency is met -- no matter if the
 dependency is a regular program or a programming language module.
 
 \subsection{Lightweight filesystem virtualization without containers}
@@ -410,7 +410,7 @@ one installed version, then any existing files from other versions of that
 dependency are removed from the private mount point of that process. This
 ensures that only a single version of a dependency is ``active'' at a time.
 
-Put it simply, if a program depends on a given library `/usr/lib/libfoo.so` and it
+Put it simply, if a program depends on a given library \texttt{/usr/lib/libfoo.so} and it
 needs it to be specifically of version 1.2.3, Runner will ensure that it is
 version 1.2.3.
 
@@ -431,7 +431,7 @@ The layout of the filesystem tree we defined on GoboLinux includes a symbolic li
 \texttt{lib64 $\rightarrow$ lib} for backwards compatibility purposes alone so that
 an executable searching for that directory can find it.
 
-Again, if a program depends on a given library `/usr/lib/libfoo.so` and it
+Again, if a program depends on a given library \texttt{/usr/lib/libfoo.so} and it
 needs it to be specifically 32-bit (even if the rest of the system sees it
 as 64-bit), Runner will ensure that it is 32-bit.
 
