@@ -305,6 +305,7 @@ wrappers recently introduced on Guix, but suitable to the layout of the
 \texttt{/Programs} tree and supporting multiarch executables and libraries
 in a rather unique way.
 
+\textbf{Dependency resolution.}
 Runner works by creating private mounts for each program it executes. The
 private mounts are composed by \texttt{/Sys\-tem/Index} with overlays mounts
 of each dependency of that program. The dependency list can be given either
@@ -337,11 +338,13 @@ Put it simply, if a program depends on a given library \texttt{/usr/lib/lib\-foo
 needs it to be specifically of version 1.2.3, Runner will ensure that it is
 version 1.2.3.
 
-Another metadata file processed by Runner is \texttt{Resources/Environment}.
+\textbf{Environment settings.}
+Another metadata file processed by Runner is \texttt{Resources/\-Environment}.
 That file contains environment variables that must be exported to the
-program it will run, such as \$PYTHONPATH (defined by the Python package)
-and \$GTK\_PATH (defined by GTK+).
+program it will run, such as \$PY\-THONPATH (defined by the Python package)
+and \$GTK\_\-PATH (defined by GTK+).
 
+\textbf{Multiarch support.}
 Runner also supports running executables built for another architectures.
 When given a random ELF executable to run along with a Dependencies file,
 Runner parses the ELF header to identify which architecture it was built
@@ -351,7 +354,7 @@ entries whose \texttt{Resources/Architecture} contents matches the target
 architecture string.
 
 When the executable provided to Runner comes from an installed program
-under \texttt{/Programs}, that program's \texttt{Resources/Architecture}
+under \texttt{/Programs}, that program's \texttt{Re\-sources/Architecture}
 metadata file is used to identify the architecture string that must be
 searched under the list of installed dependencies. This approach enables
 the correct generation of multiarch overlays for both ELF executables as
